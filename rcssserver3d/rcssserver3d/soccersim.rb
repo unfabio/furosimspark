@@ -111,6 +111,11 @@ addSoccerVar('MinOppDistance',0.8)
 addSoccerVar('Min2PlDistance',0.4)
 addSoccerVar('Min3PlDistance',1.0)
 
+# 2014 server changes
+addSoccerVar('ReportScore', true)
+addSoccerVar('LabelMessages', true)
+
+
 scene = get($scenePath)
 if (scene != nil)
   scene.importScene('rsg/agent/soccer.rsg')

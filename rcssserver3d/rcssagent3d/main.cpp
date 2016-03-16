@@ -269,10 +269,16 @@ void Run()
    PutMessage("(scene rsg/agent/furo7x7.rsg)");
    GetMessage(msg);
 
+ srand (time(NULL));
+
    PutMessage("(init (unum 0) (teamname FuroRobot))");
    GetMessage(msg);
 
-   PutMessage("(beam -10 0 -90)");
+stringstream ss;
+
+ss << "(beam " <<-((rand() % 20)) << " " << ((rand() % 10)-5)<<" "<< ((rand() % 100)-50) << ")";
+
+   PutMessage(ss.str());
 
 
     while (gLoop)

@@ -23,6 +23,7 @@
 #include <stdio.h>      /* printf, scanf, puts, NULL */
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+#include <map>
 
 using namespace std;
 using namespace oxygen;
@@ -53,7 +54,6 @@ using namespace salt;
 #define CASE_ALPHANUM CASE_ALPHA:CASE_NUMBER
 
 
-
 CarBehavior::CarBehavior() : mZG("." PACKAGE_NAME)
 {
 }
@@ -81,6 +81,55 @@ string CarBehavior::Init()
     return ss.str();
 }
 
+
+
+
+string CarBehavior::Think(const std::string& message)
+{
+
+   std::size_t pos = message.find("(B (pol ");
+   std::size_t pos2 = message.find("(pm PlayOn)");
+
+    std::string text = "";
+    float BDistancia,BAngulo;
+
+     float velocity1 = 0;
+     float velocity2 = 0;
+
+
+
+
+   if(pos>0 &&  (pos2 > 0)&&(pos2 < 1000)){
+      text = message.substr(pos+8 );
+      std::sscanf(text.c_str(),"%f %f",&BDistancia,&BAngulo);
+      cout<< "Distancia " <<BDistancia<< " Angulo " << BAngulo<< std::endl;
+
+
+      if(BAngulo>0){
+
+         velocity2 = -500/( 1+BAngulo );
+         velocity1 = -500;
+
+      }else{
+         velocity2 = -500;
+         velocity1 = -500/(1-BAngulo);
+      }
+   }else{
+
+      velocity1 = 0;
+      velocity2 = 0;
+   }
+
+  cout << ">> " << message << endl;
+   cout << ">> " << pos2<< endl;
+   stringstream ss;
+   //ss <<"(syn)" << endl;
+   ss << "(er1 "  << velocity1 << ")(er3 "  << velocity2 << ")";
+   return ss.str();
+}
+
+
+/*
 string CarBehavior::Think(const std::string& message)
 {
     // demo: just drive forward and backward...
@@ -93,7 +142,21 @@ string CarBehavior::Think(const std::string& message)
     std::string val = "";
     std::string sangria = "                                      ";
     int NUMBER=0;
+    int valores[] ={0, 0, 0, 0, 0}
+
+string Perseptions[10][10][10][10];
+
+
+std::map<string,int> first;
+
+first['time']=0;
+first['See']=0;
+first['GS']=0;
+
+
+
 int pos = 0;
+char str1[32];
 std::stringstream ss;
 while (pos < message.length())
 {
@@ -101,67 +164,49 @@ while (pos < message.length())
       case '(':
          std::cout << std::endl << sangria.substr(0, n*5)<<  "[";
          n++;
+         valores[n]++;
          //std::cout << std::endl << sangria.substr(0, n*3)<< n << "[";
-         NUMBER=0;
-
-            pos++;
+         pos++;
       break;
       case ')':
          n--;
          std::cout << std::endl << sangria.substr(0, n*5)<<  "]";
-
-         NUMBER=0;
-
             pos++;
       break;
       CASE_NUMBER:
-         if(NUMBER==0){
-            NUMBER=1;
 
             //std::getline(ss, message);
             std::stringstream(message.substr(pos))>>number;
             //std::cout << std::endl << "(" << number  << ")" << std::endl;
             std::cout << std::endl << sangria.substr(0, n*5)<< number;
-         }
 
             pos++;
          //std::cout << message[pos];
          break;
-      CASE_ALPHA:
-                  if(NUMBER==0){
-                     NUMBER=1;
+         CASE_ALPHA:
 
                      //std::getline(ss, message);
                      std::stringstream(message.substr(pos))>>val;
                      longitud = 0;
                      //std::cout << std::endl << sangria.substr(0, n*5) << "$" << val <<"$"<< std::endl  ;
+                     std::sscanf(val.c_str(),"%30[a-zA-Z0-9]s",str1);
+                        val =str1;
+                        std::cout << std::endl << sangria.substr(0, n*5) << "\'" << val<<"\'" ;
+                        pos+=val.length();
 
-                     while (longitud <= val.length() && longitud>=0 ){
-                           switch (val[longitud]) {
-                              CASE_ALPHANUM:
-                                 longitud++;
-                                 break;
-                              default:
-                                 //std::cout << val.substr(0, longitud);
-                                 val = val.substr(0, longitud);
-                                 std::cout << std::endl << sangria.substr(0, n*5) << "\"" << val<<"\"" ;
-                                 pos+=longitud;
-                                 longitud= -1;
-                              }
-                     }
+
                      if(val.compare("B")==0){
+                        //std::cout << std::endl << sangria.substr(0, n*5) << "{BALON}" ;
 
-                        std::cout << std::endl << sangria.substr(0, n*5) << "{BALON}" ;
                      }
 
                      //std::cout << std::endl << sangria.substr(0, n*5) << "{" << val <<"}" ;
                      //std::cout << std::endl << sangria.substr(0, n*5) << "\"" << val <<"\"" ;
-                  }
+
                   //std::cout << message[pos];
                   break;
       default:
-         NUMBER=0;
-         std::cout << "|" << message[pos];
+         //std::cout << "|" << message[pos];
          pos++;
    }
 };
@@ -198,7 +243,7 @@ while (pos < message.length())
                     break;
                 }
             }
-        }*/
+        }* /
         cout << ">> " << message << endl;
     ++n;
 
@@ -216,3 +261,4 @@ while (pos < message.length())
 
     return ss.str();
 }
+*/
