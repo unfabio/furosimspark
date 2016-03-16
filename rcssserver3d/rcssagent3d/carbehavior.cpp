@@ -107,12 +107,12 @@ string CarBehavior::Think(const std::string& message)
 
       if(BAngulo>0){
 
-         velocity2 = -500/( 1+BAngulo );
-         velocity1 = -500;
+         velocity2 = -400/( 1+BAngulo );
+         velocity1 = -400;
 
       }else{
-         velocity2 = -500;
-         velocity1 = -500/(1-BAngulo);
+         velocity2 = -400;
+         velocity1 = -400/(1-BAngulo);
       }
    }else{
 
