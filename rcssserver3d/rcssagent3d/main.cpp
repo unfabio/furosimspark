@@ -272,7 +272,7 @@ void Run()
    PutMessage("(init (unum 0) (teamname FuroRobot))");
    GetMessage(msg);
 
-   PutMessage("(beam -10 0 90)");
+   PutMessage("(beam -10 0 -90)");
 
 
     while (gLoop)

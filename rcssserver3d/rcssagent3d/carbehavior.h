@@ -21,6 +21,10 @@
 #define CARBEHAVIOR_H
 
 #include "behavior.h"
+#include <oxygen/gamecontrolserver/baseparser.h>
+#include <oxygen/gamecontrolserver/predicate.h>
+#include <zeitgeist/zeitgeist.h>
+
 
 class CarBehavior : public Behavior
 {
@@ -29,6 +33,9 @@ public:
 
     virtual std::string Init();
     virtual std::string Think(const std::string& message);
+protected:
+     zeitgeist::Zeitgeist mZG;
+     boost::shared_ptr<oxygen::BaseParser> mParser;
 };
 
 #endif // CARBEHAVIOR_H
