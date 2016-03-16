@@ -11,6 +11,8 @@ set(rcssagent3d_SRCS
    hoap2behavior.cpp
    naobehavior.h
    naobehavior.cpp
+   carbehavior.h
+   carbehavior.cpp
 )
 
 add_executable(rcssagent3d ${rcssagent3d_SRCS})

@@ -18,8 +18,8 @@ end
 
 # helper to get the value of a variable in the soccer namespace
 def getSoccerVar(name)
-  eval <<-EOS 
-    #{$soccerNameSpace}.#{name} 
+  eval <<-EOS
+    #{$soccerNameSpace}.#{name}
   EOS
 end
 
@@ -43,7 +43,7 @@ addSoccerVar('FieldHeight', 40.0)
 #addSoccerVar('GoalWidth', 7.32)
 addSoccerVar('GoalWidth', 9.0)
 addSoccerVar('GoalDepth', 2.0)
-#addSoccerVar('GoalHeight', 2.44) # FIFA: 2.44 
+#addSoccerVar('GoalHeight', 2.44) # FIFA: 2.44
 addSoccerVar('GoalHeight', 4.0)
 addSoccerVar('PenaltyLength',8)
 addSoccerVar('PenaltyWidth',10.5)
@@ -76,6 +76,40 @@ addSoccerVar('BallRecorder',"Ball/geometry/recorder")
 addSoccerVar('LeftGoalRecorder',"LeftGoalSpace/GoalBoxL/GoalColliderL/recorder")
 addSoccerVar('RightGoalRecorder',"RightGoalSpace/GoalBoxR/GoalColliderR/recorder")
 
+# the soccer field dimensions in meters
+addSoccerVar('GoalKickDist', 1.0)
+
+# soccer game settings
+addSoccerVar('CoinTossForKickOff', false)
+addSoccerVar('PenaltyShootout', false)
+
+addSoccerVar('AutomaticQuit', false)
+addSoccerVar('ChangeSidesInSecondHalf', false)
+
+# agent parameters
+addSoccerVar('MaxRobotTypeCount', 7)
+addSoccerVar('MinRobotTypesCount', 3)
+addSoccerVar('MaxSumTwoRobotTypes', 9)
+
+# Noise added to requested beam positions
+addSoccerVar('BeamNoiseXY',0.05)
+addSoccerVar('BeamNoiseAngle',10.0)
+# charging foul parameters
+addSoccerVar('UseCharging', false)
+addSoccerVar('ChargingMinSpeed', 0.2)
+addSoccerVar('ChargingMinBallDist', 0.2)
+addSoccerVar('IllegalInterceptMinAngle', 70)
+addSoccerVar('MaxTouchGroupSize', 2)
+
+# auto ref parameters  FCP 2010
+addSoccerVar('NotStandingMaxTime',30)
+addSoccerVar('GoalieNotStandingMaxTime',60)
+addSoccerVar('GroundMaxTime',15)
+addSoccerVar('GoalieGroundMaxTime', 30)
+addSoccerVar('MaxPlayersInsideOwnArea',3)
+addSoccerVar('MinOppDistance',0.8)
+addSoccerVar('Min2PlDistance',0.4)
+addSoccerVar('Min3PlDistance',1.0)
 
 scene = get($scenePath)
 if (scene != nil)
@@ -89,7 +123,7 @@ if (gameControlServer != nil)
   gameControlServer.initControlAspect('BallStateAspect')
   gameControlServer.initControlAspect('SoccerRuleAspect')
 end
-  
+
 # init monitorItems to transmit game state information
 monitorServer = get($serverPath+'monitor')
 if (monitorServer != nil)

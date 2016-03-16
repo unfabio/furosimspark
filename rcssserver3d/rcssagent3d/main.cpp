@@ -22,6 +22,7 @@
 #include <signal.h>
 #include <string>
 #include <iostream>
+#include <sstream>
 #include <rcssnet/tcpsocket.hpp>
 //#include <rcssnet/udpsocket.hpp>
 #include <rcssnet/exception.hpp>
@@ -29,9 +30,9 @@
 #include <boost/scoped_ptr.hpp>
 //#include "soccerbehavior.h"
 #include "soccerbotbehavior.h"
-//#include "carbehavior.h"
+#include "carbehavior.h"
 //#include "leggedspherebehavior.h"
-//#include "hoap2behavior.h"
+#include "hoap2behavior.h"
 #include "naobehavior.h"
 
 #ifdef HAVE_SYS_SOCKET_H
@@ -67,7 +68,8 @@ void PrintGreeting()
 {
     cout << "agentspark, a spark demo agent\n"
          << "Copyright (C) 2004 Koblenz University.\n"
-         << "2004 RoboCup Soccer Server 3D Maintenance Group.\n\n";
+         << "2004 RoboCup Soccer Server 3D Maintenance Group.\n"
+         << "2015 Fabio Fabian Barbosa C.\n\n";
 }
 
 void PrintHelp()
@@ -91,7 +93,7 @@ void ReadOptions(int argc, char* argv[])
             else if ( strncmp( argv[i], "--host", 6 ) == 0 )
             {
                 string tmp=argv[i];
-                
+
                 if ( tmp.length() <= 7 ) // minimal sanity check
                 {
                     PrintHelp();
@@ -99,8 +101,8 @@ void ReadOptions(int argc, char* argv[])
                 }
                 gHost = tmp.substr(7);
             }
-            
-                
+
+
         }
 }
 
@@ -153,7 +155,7 @@ bool SelectInput()
     struct timeval tv = {60,0};
     FD_ZERO(&readfds);
     FD_SET(gSocket.getFD(),&readfds);
-    
+
     while(1) {
         switch(select(gSocket.getFD()+1,&readfds, 0, 0, &tv)) {
         case 1:
@@ -184,6 +186,7 @@ void PutMessage(const string& msg)
     string prefix((const char*)&len,sizeof(unsigned int));
     string str = prefix + msg;
     gSocket.send(str.data(),str.size());
+      cout << "<< " << msg << endl;
 }
 
 bool GetMessage(string& msg)
@@ -232,7 +235,7 @@ bool GetMessage(string& msg)
         int readLen = sizeof(buffer) - msgRead;
         if(readLen > msgLen - msgRead)
             readLen = msgLen - msgRead;
- 
+
         int readResult = gSocket.recv(offset, readLen);
         if(readResult < 0)
             continue;
@@ -253,19 +256,27 @@ bool GetMessage(string& msg)
 }
 
 void Run()
-{    
+{
     //scoped_ptr<Behavior> behavior(new SoccerbotBehavior());
     //scoped_ptr<Behavior> behavior(new SoccerBehavior());
-    //scoped_ptr<Behavior> behavior(new CarBehavior());
+    scoped_ptr<Behavior> behavior(new CarBehavior());
     //scoped_ptr<Behavior> behavior(new LeggedSphereBehavior());
     //scoped_ptr<Behavior> behavior(new Hoap2Behavior());
-    scoped_ptr<Behavior> behavior(new NaoBehavior());
+    //scoped_ptr<Behavior> behavior(new NaoBehavior());
 
-    PutMessage(behavior->Init());
-
+   // PutMessage(behavior->Init());
     string msg;
+   PutMessage("(scene rsg/agent/furo7x7.rsg)");
+   GetMessage(msg);
+
+   PutMessage("(init (unum 0) (teamname FuroRobot))");
+   GetMessage(msg);
+
+   PutMessage("(beam -10 0 90)");
+
+
     while (gLoop)
-        {  
+        {
             GetMessage(msg);
             PutMessage(behavior->Think(msg));
         }
@@ -274,7 +285,7 @@ void Run()
 int
 main(int argc, char* argv[])
 {
-    // registering the handler, catching SIGINT signals 
+    // registering the handler, catching SIGINT signals
     signal(SIGINT, handler);
 
     PrintGreeting();

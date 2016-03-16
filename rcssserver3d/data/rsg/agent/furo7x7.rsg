@@ -1,0 +1,164 @@
+; -*- mode: lisp; -*-
+
+;
+; this file constructs a newfuro, the connected agent controlls
+; two joint motor
+;
+(RSG 0 1)
+(
+   (def $lenX       .75)
+   (def $lenY       .75)
+   (def $lenZ       .6)
+   (nd Space
+      (setName Furo)
+      (disableInnerCollision true)
+      (nd AgentAspect
+         (setName body)
+         (setLocalPos 0 0 .15)
+         ; install a perceptor to receive the current simulation time
+         (nd TimePerceptor)
+         (nd RigidBody
+             (setName boxBody)
+             ;(setBoxTotal $totalMass $lenX $lenY $lenZ)
+             (setBox 1 $lenX $lenY $lenZ)
+             (nd DragController
+               (setAngularDrag 0.01)
+               (setLinearDrag 0.01)
+            )
+         )
+         ; create the char chassis
+         (nd Transform
+            (setName chassis)
+            (setLocalPos 0 0 .0)
+            ;(importScene rsg/boxspheres/box.rsg 0.75 0.75 0.3 1 matBlack)
+            ;(templ $lenX $lenY $lenZ $totalMass $material)
+            (nd Box
+               (setExtents $lenX $lenY $lenZ)
+               (setMaterial matRed)
+            )
+
+            (nd RigidBody
+                (setName boxBody)
+                ;(setBoxTotal $totalMass $lenX $lenY $lenZ)
+                (setBox 1000 $lenX $lenY $lenZ)
+                (nd DragController
+                  (setAngularDrag 0.01)
+                  (setLinearDrag 0.01)
+               )
+            )
+
+            (nd BoxCollider
+                (setBoxLengths $lenX $lenY $lenZ)
+                (nd ContactJointHandler
+                  (setContactBounceMode false)
+
+                  (setContactSlipMode true)
+                  (setContactSlip 0.1 0.1)
+
+                  (setContactSoftERPMode true)
+                  (setContactSoftERP 0.2)
+
+                  (setContactSoftCFM true)
+                  (setContactSoftCFM 0.01)
+
+               )
+             )
+         )
+
+         (nd FixedJoint
+            (attach ../chassis/boxBody ../boxBody )
+         )
+   ; install a node holding agent state data
+         (nd AgentState
+            (setName AgentState)
+             ; add a gamestateperceptor
+            (nd GameStatePerceptor)
+            (nd Transform
+               (nd Cylinder
+                  (setName SelectionMarker)
+                  (setParams 1.0 1.0)
+                  (setScale 0.2 0.2 0.02)
+                  (setMaterial matSelect)
+                  (setTransparent)
+               )
+            )
+         )
+         (nd GyroRatePerceptor (setName torso))
+         (nd Accelerometer (setName torso))
+         (nd BeamEffector)
+         (nd SayEffector)
+         (nd AgentSyncEffector)
+         (nd VisionPerceptor
+            (setSenseMyPos false)
+            (setStaticSenseAxis false)
+            (addNoise false)
+         )
+      );end of AgentAspect
+
+      (nd Transform
+         (setLocalPos .35 0 0.05)
+         (setName r1)
+         (setLocalRotation 0 90 0)
+         (importScene rsg/boxspheres/wheel.rsg 0.3 0.2 20 matBlue)
+         (nd HingeJoint
+            (attach ../sphereBody ../../body/boxBody)
+            (setAnchor 0.0 0.0 0)
+            (setAxis 2) ; move around z-axis
+            ; enable the joint motors
+            (setMaxMotorForce 0 400)
+            (setJointMaxSpeed1  200)
+            ;  install a perceptor
+            (nd HingePerceptor   (setName sr1) )
+            ; install an effector to control the joint motors
+            (nd HingeEffector (setName er1) )
+         )
+      )
+
+      (nd Transform
+         (setLocalPos -.35 0 0.05)
+         (setName r3)
+         (setLocalRotation 0 90 0)
+         (importScene rsg/boxspheres/wheel.rsg  0.3 0.2 20 matBlue)
+         ; add some boxes to visualize the tire spin
+         (nd HingeJoint
+            (attach ../sphereBody ../../body/boxBody)
+            (setAnchor 0.0 0.0 0)
+            (setAxis 2) ; move around z-axis
+            ; enable the joint motors
+            (setMaxMotorForce 0 400)
+            (setJointMaxSpeed1  200)
+            ;  install a perceptor
+            (nd HingePerceptor   (setName sr3) )
+            ; install an effector to control the joint motors
+            (nd HingeEffector (setName er3) )
+         )
+      )
+
+   		(nd Transform
+         (setName Front)
+         (setLocalPos 0 +.37 -.25)
+         (importScene rsg/boxspheres/sphere.rsg 0.05 2 matBlue)
+
+         (nd SliderJoint
+              (attach ../sphereBody ../../body/boxBody)
+               (setLowStopPos 0 0)
+             (setHighStopPos 0 .05)
+         )
+        )
+
+
+   	  (nd Transform
+   	  (setName Back)
+   	  (setLocalPos 0 -.37 -.25)
+   	  (importScene rsg/boxspheres/sphere.rsg 0.05 2 matBlue)
+
+   	  (nd SliderJoint
+
+   	  	  (attach ../sphereBody ../../body/boxBody)
+   	  		(setLowStopPos 0 0)
+   	  	 (setHighStopPos 0 .05)
+   	  )
+   	  )
+
+   );end of nd Space
+)

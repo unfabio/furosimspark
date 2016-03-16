@@ -1,0 +1,54 @@
+; -*- mode: lisp; -*-
+
+(RSG 0 1)
+(
+ (templ $radius $length $totalMass $material)
+
+       (nd Cylinder
+     (setParams 1.0 1.0)
+     (setScale $radius $radius $length )
+
+     (setMaterial $material)
+     )
+     (nd Box
+     (setExtents 1 0.01 0.01)
+     (setMaterial matOrange)
+     )
+
+     (nd Box
+     (setExtents 0.01 1 0.01)
+     (setMaterial matRed)
+     )
+
+     (nd Box
+     (setExtents 0.01 0.01 1)
+     (setMaterial matYellow)
+     )
+
+ (nd RigidBody
+       (setName sphereBody)
+       ;(setSphereTotal $totalMass $radius)
+       (setSphere $totalMass $radius)
+       (nd DragController
+             (setAngularDrag 0.01)
+	     (setLinearDrag 0.01)
+	)
+)
+
+ (nd SphereCollider
+       (setRadius $radius)
+
+       (nd ContactJointHandler
+	     (setContactBounceMode false)
+
+	     (setContactSlipMode true)
+	     (setContactSlip 0.1 0.1)
+
+	     (setContactSoftERPMode true)
+	     (setContactSoftERP 0.2)
+
+	     (setContactSoftCFM true)
+	     (setContactSoftCFM 0.01)
+	     )
+       )
+ )
