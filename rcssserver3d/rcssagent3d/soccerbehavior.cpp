@@ -38,7 +38,7 @@ SoccerBehavior::~SoccerBehavior()
 void SoccerBehavior::SetupVisionObjectMap()
 {
     mVisionObjectMap.clear();
-    mVisionObjectMap["Ball"]    = VO_BALL;
+    mVisionObjectMap["B"]    = VO_BALL;
 }
 
 string SoccerBehavior::Init()
@@ -57,8 +57,10 @@ string SoccerBehavior::Init()
     // use the scene effector to build the agent and beam to a
     // position near the center of the playing field
     return
-        "(scene rsg/agent/soccerplayer.rsg)"
-        "(beam -6 0 0)";
+   //     "(scene rsg/agent/soccerplayer.rsg)" ;
+         "(scene rsg/agent/furo7x7.rsg)" ;
+      //  "(beam -6 0 0)";
+
 ;
 }
 
@@ -176,7 +178,9 @@ void SoccerBehavior::ParseVision(const Predicate& predicate)
     Predicate::Iterator iter(predicate);
 
     // advance to the section about object 'name'
-    if (! predicate.FindParameter(iter,"mypos"))
+
+    //if (! predicate.FindParameter(iter,"B"))
+        if (! predicate.FindParameter(iter,"F1L"))
         {
             return;
         }
@@ -187,28 +191,56 @@ void SoccerBehavior::ParseVision(const Predicate& predicate)
     predicate.GetValue(iter,mMyPos);
 }
 
+
+bool SoccerBehavior::GameState(const Predicate& predicate)
+{
+    ParseObjectVision(predicate);
+
+    // find the PerfectVision data about the object
+    Predicate::Iterator iter(predicate);
+
+    // advance to the section about object 'name'
+
+    if (! predicate.FindParameter(iter,"pm"))
+        {
+            return false;
+        }
+
+    // read my position
+   string Estado;
+
+    predicate.GetValue(iter,Estado);
+
+    if(Estado!="PlayOn"){
+
+       return false;
+     }
+     return true;
+
+}
+
 string SoccerBehavior::TurnLeft() const
 {
 //     std::cerr << "turn left" << std::endl;
-    return "(lte -100)(rte 100)";
+    return "(er1 -10)(er3 10)";
 }
 
 string SoccerBehavior::TurnRight() const
 {
 //     std::cerr << "turn right" << std::endl;
-    return "(lte 100)(rte +100)";
+    return "(er1 10)(er3 -10)";
 }
 
 string SoccerBehavior::Forward() const
 {
 //     std::cerr << "forward" << std::endl;
-    return "(lte 100)(rte 100)";
+    return "(er1 -50)(er3 -50)";
 }
 
 string SoccerBehavior::Kick() const
 {
 //     std::cerr << "kick";
-    return "(kick 0  100)";
+    return "(kick 0  10)";
 }
 
 string SoccerBehavior::SeekBall() const
@@ -234,8 +266,15 @@ string SoccerBehavior::SeekBall() const
         }
 }
 
+
+
+
 string SoccerBehavior::Think(const std::string& message)
 {
+
+   //return Forward();
+
+   cout << message << endl;
     boost::shared_ptr<PredicateList> predList =
         mParser->Parse(message);
 
@@ -252,21 +291,35 @@ string SoccerBehavior::Think(const std::string& message)
                 const Predicate& predicate = (*iter);
 
                 // check for the Vision perceptor
-                if (predicate.name == "Vision")
-                    {
-                        ParseVision(predicate);
-                        continue;
-                    }
+
+              if (predicate.name == "See")
+               {
+                     ParseVision(predicate);
+                     continue;
+               }else if (predicate.name == "GS")
+               {
+
+
+                  if(!GameState(predicate)){
+                     return "(er1 0)(er3 0)";
+                  }
+
+               }
             }
     }
 
     const VisionSense& vs = GetVisionSense(VO_BALL);
 
-    if (vs.distance <= 1.5)
+/*    stringstream ss;
+   ss <<"(syn)" << endl;
+   //ss << "(er1 "  << velocity1 << ")(er3 "  << velocity2 << ")";
+   return ss.str();*/
+
+   /* if (vs.distance <= 1.5)
         {
             return Kick();
         } else
-        {
+        {*/
             return SeekBall();
-        }
+       /* }*/
 }

@@ -59,6 +59,7 @@ public:
 protected:
     void ParseObjectVision(const oxygen::Predicate& predicate);
     void ParseVision(const oxygen::Predicate& predicate);
+    bool GameState(const oxygen::Predicate& predicate);
     void SetupVisionObjectMap();
 
     std::string TurnLeft() const;

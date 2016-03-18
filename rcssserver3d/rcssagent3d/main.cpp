@@ -28,7 +28,7 @@
 #include <rcssnet/exception.hpp>
 #include "behavior.h"
 #include <boost/scoped_ptr.hpp>
-//#include "soccerbehavior.h"
+#include "soccerbehavior.h"
 #include "soccerbotbehavior.h"
 #include "carbehavior.h"
 //#include "leggedspherebehavior.h"
@@ -52,6 +52,7 @@ using namespace boost;
 TCPSocket gSocket;
 //UDPSocket gSocket;
 string gHost = "127.0.0.1";
+int unum = 0;
 int gPort = 3100;
 
 // bool to indicate whether to continue the agent mainloop
@@ -90,17 +91,27 @@ void ReadOptions(int argc, char* argv[])
                     PrintHelp();
                     exit(0);
                 }
-            else if ( strncmp( argv[i], "--host", 6 ) == 0 )
-            {
-                string tmp=argv[i];
+                else if ( strncmp( argv[i], "--host", 6 ) == 0 )
+               {
+                   string tmp=argv[i];
 
-                if ( tmp.length() <= 7 ) // minimal sanity check
-                {
-                    PrintHelp();
-                    exit(0);
-                }
-                gHost = tmp.substr(7);
-            }
+                   if ( tmp.length() <= 7 ) // minimal sanity check
+                   {
+                       PrintHelp();
+                       exit(0);
+                   }
+                   gHost = tmp.substr(7);
+               }else if ( strncmp( argv[i], "--unum", 6 ) == 0 )
+               {
+                   string tmp=argv[i];
+
+                   if ( tmp.length() <= 7 ) // minimal sanity check
+                   {
+                       PrintHelp();
+                       exit(0);
+                   }
+                   unum = std::stoi(tmp.substr(7));
+               }
 
 
         }
@@ -108,7 +119,7 @@ void ReadOptions(int argc, char* argv[])
 
 bool Init()
 {
-    cout << "connecting to TCP " << gHost << ":" << gPort << "\n";
+    cout << "connecting to TCP " << gHost << ":" << gPort << " unum " << unum << "\n";
     //cout << "connecting to UDP " << gHost << ":" << gPort << "\n";
 
     try
@@ -258,28 +269,42 @@ bool GetMessage(string& msg)
 void Run()
 {
     //scoped_ptr<Behavior> behavior(new SoccerbotBehavior());
-    //scoped_ptr<Behavior> behavior(new SoccerBehavior());
-    scoped_ptr<Behavior> behavior(new CarBehavior());
+    scoped_ptr<Behavior> behavior(new SoccerBehavior());
+    //scoped_ptr<Behavior> behavior(new CarBehavior());
     //scoped_ptr<Behavior> behavior(new LeggedSphereBehavior());
     //scoped_ptr<Behavior> behavior(new Hoap2Behavior());
     //scoped_ptr<Behavior> behavior(new NaoBehavior());
 
-   // PutMessage(behavior->Init());
+    PutMessage(behavior->Init());
     string msg;
-   PutMessage("(scene rsg/agent/furo7x7.rsg)");
+   //PutMessage("(scene rsg/agent/furo7x7.rsg)");
+/*
+   PutMessage("(scene rsg/agent/soccerplayer.rsg)(beam -6 0 0)");
+
    GetMessage(msg);
 
- srand (time(NULL));
+*/
+GetMessage(msg);
 
-   PutMessage("(init (unum 0) (teamname FuroRobot))");
-   GetMessage(msg);
+stringstream ss,ss1;
 
-stringstream ss;
-
-ss << "(beam " <<-((rand() % 20)) << " " << ((rand() % 10)-5)<<" "<< ((rand() % 100)-50) << ")";
+ss <<"(init (unum "<< unum <<") (teamname furo))";
 
    PutMessage(ss.str());
+   GetMessage(msg);
 
+
+
+srand (time(NULL));
+//ss << "(beam " <<-((rand() % 20)) << " " << ((rand() % 10)-5)<<" "<< ((rand() % 100)-50) << ")";
+
+ss1 << "(beam " <<-5-unum*3 << " " << ((rand() % 10)-5)<<" "<< ((rand() % 100)-50) << ")";
+
+//ss1 << "(beam " <<1 << " " << 0<<" "<< ((rand() % 100)-50) << ")";
+
+
+   PutMessage(ss1.str());
+//   PutMessage("(beam 4 -1 9)");
 
     while (gLoop)
         {
