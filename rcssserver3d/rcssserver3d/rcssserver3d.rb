@@ -70,8 +70,8 @@ sparkLogErrorToCerr()
 # scene.importScene('rsg/jointtest/simspark.rsg')
 
 # source soccersim.rb to run the soccer simulation
-run "soccersim.rb"
-#run "naosoccersim.rb"
+ #run "naosoccersim.rb"
+ run "soccersim.rb"
 
 # setup the integrated agent
 #sparkSetupTrain()

@@ -47,7 +47,7 @@ addSoccerVar('GoalDepth', 2.0)
 addSoccerVar('GoalHeight', 4.0)
 addSoccerVar('PenaltyLength',8)
 addSoccerVar('PenaltyWidth',10.5)
-addSoccerVar('BorderSize', 10.0)
+addSoccerVar('BorderSize', 2.0)
 addSoccerVar('FreeKickDistance', 4.5)
 addSoccerVar('FreeKickMoveDist', 9.0)
 addSoccerVar('AutomaticKickOff', false)
@@ -59,9 +59,9 @@ addSoccerVar('AgentRadius',  3.5)
 addSoccerVar('AgentMaxSpeed', 10.0)
 
 # ball parameters
-addSoccerVar('BallRadius', 0.4)
+addSoccerVar('BallRadius', 0.21)
 #addSoccerVar('BallDensity',2)
-addSoccerVar('BallMass',0.43) # FIFA: 410-450 g
+addSoccerVar('BallMass',0.46) # FIFA: 410-450 g
 
 # soccer rule parameters
 addSoccerVar('RuleGoalPauseTime',3.0)
@@ -115,6 +115,8 @@ addSoccerVar('Min3PlDistance',1.0)
 addSoccerVar('ReportScore', true)
 addSoccerVar('LabelMessages', true)
 
+# textures
+createVariable('Nao', 'UseTexture', 'true')
 
 scene = get($scenePath)
 if (scene != nil)
