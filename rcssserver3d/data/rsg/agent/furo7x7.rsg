@@ -6,9 +6,9 @@
 ;
 (RSG 0 1)
 (
-   (def $lenX       .75)
-   (def $lenY       .75)
-   (def $lenZ       .6)
+   (def $lenX       0.75)
+   (def $lenY       0.75)
+   (def $lenZ       0.6)
    (nd Space
       (setName Furo)
       (disableInnerCollision true)
@@ -32,10 +32,40 @@
             (setLocalPos 0 0 .0)
             ;(importScene rsg/boxspheres/box.rsg 0.75 0.75 0.3 1 matBlack)
             ;(templ $lenX $lenY $lenZ $totalMass $material)
-            (nd Box
-               (setExtents $lenX $lenY $lenZ)
-               (setMaterial matRed)
-            )
+         ;   (nd Box
+         ;      (setExtents $lenX $lenY $lenZ)
+         ;      (setMaterial matRed)
+         ;   )
+
+            (nd Transform
+       	  (setName Back)
+       	  (setLocalPos 0 (eval $lenY * 0.45 ) 0)
+         ;  (setLocalPos 0.0 0.0 (eval $UpperarmHeight / 2.0))
+
+           (nd Box
+             (setExtents $lenX (eval $lenY * 0.1) $lenZ)
+             (setMaterial matWhite)
+           )
+
+
+              (nd Transform
+             (setName Back)
+             (setLocalPos 0 (eval -0.5 * $lenY  ) 0)
+           ;  (setLocalPos 0.0 0.0 (eval $UpperarmHeight / 2.0))
+
+             (nd Box
+              (setExtents $lenX (eval $lenY * 0.9) $lenZ)
+              (setMaterial matRed)
+             )
+
+
+             )
+
+
+       	  )
+
+
+
 
             (nd RigidBody
                 (setName boxBody)
