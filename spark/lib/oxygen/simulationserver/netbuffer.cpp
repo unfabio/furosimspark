@@ -25,6 +25,7 @@ using namespace std;
 
 void NetBuffer::AddFragment(const std::string& d)
 {
+    //cout <<"===" << d <<"==="<< endl;
     mData += d;
 }
 
@@ -42,4 +43,3 @@ bool NetBuffer::IsEmpty() const
 {
     return mData.empty();
 }
-
