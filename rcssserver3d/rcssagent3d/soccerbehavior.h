@@ -44,7 +44,15 @@ public:
 
     enum VisionObject
     {
-        VO_BALL   = 0,
+         VO_BALL   = 0,
+         F1L   = 1,
+         G1L   = 2,
+         G2L   = 3,
+         F2L   = 4,
+         F1R   = 5,
+         G1R   = 6,
+         G2R   = 7,
+         F2R   = 8
     };
 
 public:
