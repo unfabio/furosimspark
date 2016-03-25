@@ -15,6 +15,10 @@
       (nd AgentAspect
          (setName body)
          (setLocalPos 0 0 .15)
+         ; we want to initialize
+         ;(nd InitEffector)
+         (nd SingleMatInitEffector)
+
          ; install a perceptor to receive the current simulation time
          (nd TimePerceptor)
          (nd RigidBody
@@ -129,7 +133,7 @@
          (setLocalPos .35 0 0.05)
          (setName r1)
          (setLocalRotation 0 90 0)
-         (importScene rsg/boxspheres/wheel.rsg 0.3 0.2 20 matBlue)
+         (importScene rsg/boxspheres/wheel.rsg 0.3 0.2 20 matDarkGrey)
          (nd HingeJoint
             (attach ../sphereBody ../../body/boxBody)
             (setAnchor 0.0 0.0 0)
@@ -148,7 +152,7 @@
          (setLocalPos -.35 0 0.05)
          (setName r3)
          (setLocalRotation 0 90 0)
-         (importScene rsg/boxspheres/wheel.rsg  0.3 0.2 20 matBlue)
+         (importScene rsg/boxspheres/wheel.rsg  0.3 0.2 20 matDarkGrey)
          ; add some boxes to visualize the tire spin
          (nd HingeJoint
             (attach ../sphereBody ../../body/boxBody)
