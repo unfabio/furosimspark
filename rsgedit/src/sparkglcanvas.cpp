@@ -193,7 +193,7 @@ bool SparkGLCanvas::Init()
                 << "(SparkGLCanvas) ERROR: InputSystem not found" << std::endl;
         }
 
-    mRenderServer = shared_dynamic_cast<RenderServer>
+    mRenderServer = dynamic_pointer_cast<RenderServer>
         (spark->GetCore()->Get("/sys/server/render"));
 
     if (mRenderServer.get() == 0)

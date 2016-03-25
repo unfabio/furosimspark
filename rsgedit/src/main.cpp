@@ -64,8 +64,8 @@ bool RsgEditApp::OnInit()
     wxYield();
 
     mSpark = shared_ptr<SimSpark>(new SimSpark());
-
-    if (! mSpark->Init(argc, reinterpret_cast<char**>(argv)))
+    char* argv2[10];
+    if (! mSpark->Init(argc, reinterpret_cast<char**>(argv2)))
         {
             return false;
         }
