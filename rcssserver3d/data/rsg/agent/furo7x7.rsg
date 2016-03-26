@@ -17,19 +17,25 @@
          (setLocalPos 0 0 .15)
          ; we want to initialize
          ;(nd InitEffector)
-         (nd SingleMatInitEffector)
-
+         ;(nd SingleMatInitEffector)
+         (nd StaticMeshInitEffector)
          ; install a perceptor to receive the current simulation time
          (nd TimePerceptor)
          (nd RigidBody
              (setName boxBody)
-             ;(setBoxTotal $totalMass $lenX $lenY $lenZ)
+             ;(setBoxTotal $totalMass $lenX $lenY $lenZ)44
              (setBox 1 $lenX $lenY $lenZ)
              (nd DragController
                (setAngularDrag 0.01)
                (setLinearDrag 0.01)
             )
          )
+         (nd SingleMatNode
+             (load 'models/soccerbottorso.obj')
+             ;(setScale (eval 0.5 * $upperLenX) (eval 0.5 * $upperLenY) (eval 0.5 * $upperLenZ))
+             (setScale 0.35 0.35 0.35)
+         )
+
          ; create the char chassis
          (nd Transform
             (setName chassis)
@@ -41,34 +47,23 @@
          ;      (setMaterial matRed)
          ;   )
 
-            (nd Transform
-       	  (setName Back)
-       	  (setLocalPos 0 (eval $lenY * 0.45 ) 0)
-         ;  (setLocalPos 0.0 0.0 (eval $UpperarmHeight / 2.0))
-
-           (nd Box
-             (setExtents $lenX (eval $lenY * 0.1) $lenZ)
-             (setMaterial matWhite)
-           )
-
-
-              (nd Transform
-             (setName Back)
-             (setLocalPos 0 (eval -0.5 * $lenY  ) 0)
-           ;  (setLocalPos 0.0 0.0 (eval $UpperarmHeight / 2.0))
-
-             (nd Box
-              (setExtents $lenX (eval $lenY * 0.9) $lenZ)
-              (setMaterial matRed)
-             )
-
-
-             )
-
-
-       	  )
-
-
+;;Cuerpo visual Rojo Blanco
+;            (nd Transform
+;       	  (setName Back)
+;       	  (setLocalPos 0 (eval $lenY * 0.45 ) 0)
+;           (nd Box
+;             (setExtents $lenX (eval $lenY * 0.1) $lenZ)
+;             (setMaterial matWhite)
+;           )
+;              (nd Transform
+;             (setName Back)
+;             (setLocalPos 0 (eval -0.5 * $lenY  ) 0)
+;             (nd Box
+;              (setExtents $lenX (eval $lenY * 0.9) $lenZ)
+;              (setMaterial matRed)
+;             )
+;             )
+;       	  )
 
 
             (nd RigidBody
@@ -107,6 +102,7 @@
             (setName AgentState)
              ; add a gamestateperceptor
             (nd GameStatePerceptor)
+            (setRobotType 0)
             (nd Transform
                (nd Cylinder
                   (setName SelectionMarker)

@@ -5,6 +5,7 @@ import time
 import struct
 import sexpr
 import random
+import sys
 
 def send_effector(msg):
     '''Each message is prefixed with the length of the payload message.
@@ -36,9 +37,12 @@ sock.connect((HOST, PORT))
 
 #send_effector( '(scene rsg/agent/nao/nao.rsg)' )
 send_effector( '(scene rsg/agent/furo7x7.rsg)' )
+# send_effector( '(scene rsg/agent/soccerbotcomp.rsg)' )
+
+
 #send_effector( '(scene rsg/agent/newfuro.rsg)' )
 recieve_perceptors()
-send_effector( '(init (unum 0)(teamname FuroRobot))' )
+send_effector( "(init (unum 0)(teamname Furo"+sys.argv[1]+"))" )
 recieve_perceptors()
 send_effector("(beam " + str(beamCoordsX) + " " + str(beamCoordsY) + " " + str(beamCoordsRot) + ")");
 recieve_perceptors()
