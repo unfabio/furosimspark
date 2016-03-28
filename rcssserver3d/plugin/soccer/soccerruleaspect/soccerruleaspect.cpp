@@ -1523,10 +1523,13 @@ SoccerRuleAspect::UpdatePlayOn()
 
     // check that player who took kickoff doesn't touch the ball a second
     // time before another agent touches the ball
+#if 0
+    //El ejecutor del saque no podrá tocar el balón por segunda vez antes de que no sea jugado por otro jugador.
     if (CheckKickOffTakerFoul())
     {
         return;
     }
+#endif
 
     // check if the ball is in one of the goals
     if (CheckGoal())
