@@ -52,6 +52,7 @@ using namespace boost;
 TCPSocket gSocket;
 //UDPSocket gSocket;
 string gHost = "127.0.0.1";
+string teamname = "Furo";
 int unum = 0;
 int gPort = 3100;
 
@@ -111,9 +112,18 @@ void ReadOptions(int argc, char* argv[])
                        exit(0);
                    }
                    unum = std::stoi(tmp.substr(7));
+                   cout << " unum " << unum << "\n";
+               }else if ( strncmp( argv[i], "--team", 6 ) == 0 )
+               {
+                   string tmp=argv[i];
+                   if ( tmp.length() <= 7 ) // minimal sanity check
+                   {
+                       PrintHelp();
+                       exit(0);
+                   }
+                   teamname = tmp.substr(7);
+                   cout << "teamname " << " unum " << unum << "\n";
                }
-
-
         }
 }
 
@@ -197,7 +207,6 @@ void PutMessage(const string& msg)
     string prefix((const char*)&len,sizeof(unsigned int));
     string str = prefix + msg;
     gSocket.send(str.data(),str.size());
-      cout << "<< " << msg << endl;
 }
 
 bool GetMessage(string& msg)
@@ -277,34 +286,23 @@ void Run()
 
     PutMessage(behavior->Init());
     string msg;
-   //PutMessage("(scene rsg/agent/furo7x7.rsg)");
-/*
-   PutMessage("(scene rsg/agent/soccerplayer.rsg)(beam -6 0 0)");
 
-   GetMessage(msg);
-
-*/
 GetMessage(msg);
 
-stringstream ss,ss1;
+stringstream ss;
 
-ss <<"(init (unum "<< unum <<") (teamname furo))";
+ss <<"(init (unum 0)(teamname "<< teamname <<"))(syn)";
 
    PutMessage(ss.str());
-   GetMessage(msg);
 
-
-
+      switch (unum) {
+         case 1:PutMessage ("(beam -25 0 90)");break;
+         case 2:PutMessage ("(beam -15 0 0)");break;
+         case 3:PutMessage ("(beam -6 0 0)");break;
+         case 4:PutMessage ("(beam -4 -4 45)");break;
+         case 5:PutMessage ("(beam -4 4 -45)");break;
+      }
 srand (time(NULL));
-//ss << "(beam " <<-((rand() % 20)) << " " << ((rand() % 10)-5)<<" "<< ((rand() % 100)-50) << ")";
-
-ss1 << "(beam " <<-5-unum*3 << " " << ((rand() % 10)-5)<<" "<< ((rand() % 100)-50) << ")";
-
-//ss1 << "(beam " <<1 << " " << 0<<" "<< ((rand() % 100)-50) << ")";
-
-
-   PutMessage(ss1.str());
-//   PutMessage("(beam 4 -1 9)");
 
     while (gLoop)
         {

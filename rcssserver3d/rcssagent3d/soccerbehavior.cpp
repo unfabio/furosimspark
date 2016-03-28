@@ -65,8 +65,8 @@ string SoccerBehavior::Init()
     // use the scene effector to build the agent and beam to a
     // position near the center of the playing field
     return
-        //     "(scene rsg/agent/soccerplayer.rsg)" ;
-        "(scene rsg/agent/furo7x7.rsg)";
+    //     "(scene rsg/agent/soccerplayer.rsg)" ;
+    "(scene rsg/agent/furo7x7.rsg)";
     //  "(beam -6 0 0)";
     ;
 }
@@ -164,15 +164,13 @@ Vector3f SoccerBehavior::GetDriveVec(const VisionSense& vision) const
 void SoccerBehavior::ParseVision(const Predicate& predicate)
 {
     ParseObjectVision(predicate);
-
     return;
     // find the PerfectVision data about the object
     Predicate::Iterator iter(predicate);
 
     // advance to the section about object 'name'
 
-    //if (! predicate.FindParameter(iter,"B"))
-    if (!predicate.FindParameter(iter, "B")) {
+    if (! predicate.FindParameter(iter,"mypos")){
         return;
     }
 
@@ -184,27 +182,42 @@ void SoccerBehavior::ParseVision(const Predicate& predicate)
 
 bool SoccerBehavior::GameState(const Predicate& predicate)
 {
-    ParseObjectVision(predicate);
-
     // find the PerfectVision data about the object
     Predicate::Iterator iter(predicate);
 
     // advance to the section about object 'name'
 
-    if (!predicate.FindParameter(iter, "pm")) {
+    string Value;
+    if (predicate.FindParameter(iter, "unum")) {
+         predicate.GetValue(iter, Value);
+         unum= stoi(Value);
+         cout << "FindParameter unum: " << unum << endl;
+    }
+    Predicate::Iterator iter2(predicate);
+    if (predicate.FindParameter(iter2, "team")) {
+         predicate.GetValue(iter2, team);
+          cout << "FindParameter team: " << team << endl;
+    }
+    Predicate::Iterator iter3(predicate);
+    if (!predicate.FindParameter(iter3, "pm")) {
         return false;
     }
-
     // read my position
-    string Estado;
+    predicate.GetValue(iter3, Estado);
 
-    predicate.GetValue(iter, Estado);
-
-    if (Estado != "PlayOn") {
-
-        return false;
-    }
-    return true;
+   if (Estado ==STR_PM_PlayOn) {
+       return true;
+   }
+   if(team == "right"){
+      if((Estado == STR_PM_KickOff_Right) || (Estado == STR_PM_KickIn_Right) || (Estado == STR_PM_CORNER_KICK_RIGHT) || (Estado ==STR_PM_GOAL_KICK_RIGHT)){
+         return true;
+      }
+   }else{
+      if((Estado == STR_PM_KickOff_Left) || (Estado == STR_PM_KickIn_Left) || (Estado == STR_PM_CORNER_KICK_LEFT) || (Estado ==STR_PM_GOAL_KICK_LEFT)){
+         return true;
+      }
+   }
+    return false;
 }
 
 string SoccerBehavior::TurnLeft() const
@@ -236,24 +249,29 @@ string SoccerBehavior::SeekBall() const
     // const VisionSense& vs = GetVisionSense(VO_BALL);
 
     Vector3f b = GetPosition(VO_BALL);
-    Vector3f g1 = GetPosition(G1R);
-    Vector3f g2 = GetPosition(G2R);
-
+    VisionObject G1, G2,F1,F2;
+    if(team=="right"){
+      G1=G1L;
+      G2=G2L;
+      F1=F1R;
+      F2=F2R;
+   }else{
+        G1=G1R;
+        G2=G2R;
+        F1=F1L;
+        F2=F2L;
+   }
+    Vector3f g1 = GetPosition(G1);
+    Vector3f g2 = GetPosition(G2);
     Vector3f Dir = (g1 + g2) / 2-b;
     //   Vector3f Dir(10,1,0);
-
     // VisionSense sense;
-
     Dir = Dir.Normalize();
-
-
-    float Pesc = (Dir.x() * b.x() + Dir.y() * b.y() + Dir.z() * b.z()) / b.Length();
-
+    float Pesc = (Dir.x() * b.x() + Dir.y() * b.y() + Dir.z() * b.z()) / b.Length(), fact=0;
    // cout << " Pesc " << Pesc <<" b.Length() " << b.Length() << endl;
-
-    if (Pesc < 0.0 && b.Length() < 50) {
-        g2 = GetPosition(F2L);
-        g1 = GetPosition(F1L);
+    if (Pesc < 0.3 && b.Length() < 10) {
+        g2 = GetPosition(F2);
+        g1 = GetPosition(F1);
         if (g1.Length() < g2.Length()) {
             Dir = g1;
         }
@@ -262,60 +280,55 @@ string SoccerBehavior::SeekBall() const
         }
     }
     else if(Pesc>0.9 && b.Length()<5) {
-        Dir = Dir + b;
+        Dir = Dir * 10 + b;
     }
    else {
-      Dir = Dir * (-0.5) * b.Length() + b;
+      fact = -b.Length() /2;
+      if(fact<-4){
+         fact=-4;
+      }
+      Dir = Dir *(-1) + b;
    }
+   return Ir(b);
+}
 
-    double theta = salt::gArcTan2(Dir[1], Dir[0]) * 57.2957;
-
-    float d = gAbs(theta);
-
-    float v1 = 0;
-    float v2 = 0;
-
-    if (d < 90) {
-
-        //if (d < 40)
-        {
+string SoccerBehavior::Ir(const salt::Vector3f& Dir) const
+{
+       double theta = salt::gArcTan2(Dir[1], Dir[0]) * 57.2957;
+       float d = gAbs(theta);
+       float v1 = 0;
+       float v2 = 0;
+       if (d < 90) {
             d = (d-90);
-            v1 = 5 - d * d / 200;
-            v2 = 5 - d * d / 200;
-            //   v1 = -40+d;
-            //   v2 = -40+d;
-        }
-    }
-    else if (theta > 0) {
-        theta -= 180;
-        d -= 90;
-        v1 = d * d / 200 - 5;
-        v2 = d * d / 200 - 5;
-    }
-    else {
-        theta += 180;
-        d -= 90;
-        v1 = d * d / 200 - 5;
-        v2 = d * d / 200 - 5;
-    }
-
-    v1 -= theta * .3;
-    v2 += theta * .3;
-    stringstream ss;
-    //ss <<"(syn)" << endl;
-    ss << "(er1 " << v1 << ")(er3 " << v2 << ")";
-
-    return ss.str();
+            v1 = 5 - d * d / 100;
+            v2 = 5 - d * d / 100;
+       }
+       else if (theta > 0) {
+           theta -= 180;
+           d -= 90;
+           v1 = d * d / 100 - 5;
+           v2 = d * d / 100 - 5;
+       }
+       else {
+           theta += 180;
+           d -= 90;
+           v1 = d * d / 100 - 5;
+           v2 = d * d / 100 - 5;
+       }
+       v1 -= theta * .5;
+       v2 += theta * .5;
+       stringstream ss;
+       //ss <<"(syn)" << endl;
+       ss << "(er1 " << v1 << ")(er3 " << v2 << ")";
+       return ss.str();
 }
 
 string SoccerBehavior::Think(const std::string& message)
 {
 
     //return Forward();
-
-    //   cout << message << endl;
+    cout << "message: " << message << endl;
     boost::shared_ptr<PredicateList> predList = mParser->Parse(message);
-
     if (predList.get() != 0) {
         PredicateList& list = *predList;
 
@@ -340,18 +353,11 @@ string SoccerBehavior::Think(const std::string& message)
         }
     }
 
-    // const VisionSense& vs = GetVisionSense(VO_BALL);
-
-    /*    stringstream ss;
-   ss <<"(syn)" << endl;
-   //ss << "(er1 "  << velocity1 << ")(er3 "  << velocity2 << ")";
-   return ss.str();*/
-
-    /* if (vs.distance <= 1.5)
-        {
-            return Kick();
-        } else
-        {*/
-    return SeekBall();
-    /* }*/
+   if(unum==3){
+      return Ir(GetPosition(G2L));
+   }if(unum%4==0){
+      return SeekBall();
+   }else{
+      return "(er1 1)(er3 -1)";
+   }
 }

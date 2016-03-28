@@ -24,7 +24,28 @@
 #include <oxygen/gamecontrolserver/baseparser.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <zeitgeist/zeitgeist.h>
+#include <string>
 
+using namespace std;
+
+#define STR_PM_BeforeKickOff "BeforeKickOff"
+#define STR_PM_KickOff_Left "KickOff_Left"
+#define STR_PM_KickOff_Right "KickOff_Right"
+#define STR_PM_PlayOn "PlayOn"
+#define STR_PM_KickIn_Left "KickIn_Left"
+#define STR_PM_KickIn_Right "KickIn_Right"
+#define STR_PM_CORNER_KICK_LEFT "corner_kick_left"
+#define STR_PM_CORNER_KICK_RIGHT "corner_kick_right"
+#define STR_PM_GOAL_KICK_LEFT "goal_kick_left"
+#define STR_PM_GOAL_KICK_RIGHT "goal_kick_right"
+#define STR_PM_OFFSIDE_LEFT "offside_left"
+#define STR_PM_OFFSIDE_RIGHT "offside_right"
+#define STR_PM_GameOver "GameOver"
+#define STR_PM_Goal_Left "Goal_Left"
+#define STR_PM_Goal_Right "Goal_Right"
+#define STR_PM_FREE_KICK_LEFT "free_kick_left"
+#define STR_PM_FREE_KICK_RIGHT "free_kick_right"
+#define STR_PM_Unknown "unknown"
 class SoccerBehavior : public Behavior
 {
 public:
@@ -79,6 +100,7 @@ protected:
     salt::Vector3f GetPosition(const VisionSense& sense) const;
     salt::Vector3f GetPosition(const VisionObject& obj) const;
     salt::Vector3f GetDriveVec(const VisionSense& vision) const;
+    std::string Ir(const salt::Vector3f& Dir) const;
 
 protected:
     zeitgeist::Zeitgeist mZG;
@@ -94,6 +116,9 @@ protected:
 
     // the players position
     salt::Vector3f mMyPos;
+    string team = "";
+    string Estado= "";
+    int unum = 0;
 };
 
 #endif // SOCCERBEHAVIOR_H
