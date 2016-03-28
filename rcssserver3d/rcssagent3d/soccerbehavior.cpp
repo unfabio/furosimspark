@@ -280,16 +280,13 @@ string SoccerBehavior::SeekBall() const
         }
     }
     else if(Pesc>0.9 && b.Length()<5) {
-        Dir = Dir * 10 + b;
+        Dir = Dir + b;
     }
    else {
-      fact = -b.Length() /2;
-      if(fact<-4){
-         fact=-4;
-      }
-      Dir = Dir *(-1) + b;
+      fact = -b.Length() *.3;
+      Dir = Dir *fact + b;
    }
-   return Ir(b);
+   return Ir(Dir);
 }
 
 string SoccerBehavior::Ir(const salt::Vector3f& Dir) const
@@ -298,25 +295,22 @@ string SoccerBehavior::Ir(const salt::Vector3f& Dir) const
        float d = gAbs(theta);
        float v1 = 0;
        float v2 = 0;
-       if (d < 90) {
-            d = (d-90);
-            v1 = 5 - d * d / 100;
-            v2 = 5 - d * d / 100;
+       float vmax = 0;
+       if (d > 90) {
+          if (theta > 0) {
+             theta -= 180;
+          }
+          else {
+             theta += 180;
+          }
+          d-=90;
+          vmax=d*d/200-10;
+       }else{
+          d=90-d;
+          vmax=-d*d/200+10;
        }
-       else if (theta > 0) {
-           theta -= 180;
-           d -= 90;
-           v1 = d * d / 100 - 5;
-           v2 = d * d / 100 - 5;
-       }
-       else {
-           theta += 180;
-           d -= 90;
-           v1 = d * d / 100 - 5;
-           v2 = d * d / 100 - 5;
-       }
-       v1 -= theta * .5;
-       v2 += theta * .5;
+       v1 = vmax - theta*.25;
+       v2 = vmax + theta*.25;
        stringstream ss;
        //ss <<"(syn)" << endl;
        ss << "(er1 " << v1 << ")(er3 " << v2 << ")";
@@ -353,9 +347,9 @@ string SoccerBehavior::Think(const std::string& message)
         }
     }
 
-   if(unum==3){
-      return Ir(GetPosition(G2L));
-   }if(unum%4==0){
+   if(unum!=4){
+      return Ir(GetPosition(F2R));
+   }if(unum==4){
       return SeekBall();
    }else{
       return "(er1 1)(er3 -1)";
