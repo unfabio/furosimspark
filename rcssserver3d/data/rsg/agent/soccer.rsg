@@ -268,8 +268,7 @@
        (setLocalPos 0 $SideWidth 0)
        (nd Box
 	     (setMaterial $SideMaterial)
-	     (setExtents (eval $FieldLength + 2 * $BorderExt) 0.01 $SideExt)
-	    ; (setExtents (eval $FieldLength + 2 * $BorderExt) $SideHeight $SideExt)
+	     (setExtents (eval $FieldLength + 2 * $BorderExt) $SideHeight $SideExt)
 	     )
        (nd PlaneCollider
 	     (setParams 0 -1.0 0 (eval -1 * $SideWidth))
