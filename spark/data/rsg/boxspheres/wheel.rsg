@@ -11,17 +11,17 @@
      (setMaterial $material)
      )
      (nd Box
-     (setExtents 1 0.01 0.01)
+     (setExtents $radius 0.01 0.01)
      (setMaterial matOrange)
      )
 
      (nd Box
-     (setExtents 0.01 1 0.01)
+     (setExtents 0.01 $radius 0.01)
      (setMaterial matRed)
      )
 
      (nd Box
-     (setExtents 0.01 0.01 1)
+     (setExtents 0.01 0.01 $radius)
      (setMaterial matYellow)
      )
 

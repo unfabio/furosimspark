@@ -6,78 +6,34 @@
 ;
 (RSG 0 1)
 (
-   (def $lenX       0.75)
-   (def $lenY       0.75)
-   (def $lenZ       0.6)
+   (def $lenXY       0.75)
+   (def $lenZ       0.7)
+   (def $totalMass      1000)
    (nd Space
       (setName Furo)
       (disableInnerCollision true)
       (nd AgentAspect
          (setName body)
-         (setLocalPos 0 0 .15)
+         (setLocalPos 0 0 (eval 0.01 * $lenZ  ))
          ; we want to initialize
-         ;(nd InitEffector)
-         ;(nd SingleMatInitEffector)
          (nd StaticMeshInitEffector)
          ; install a perceptor to receive the current simulation time
          (nd TimePerceptor)
          (nd RigidBody
              (setName boxBody)
-             ;(setBoxTotal $totalMass $lenX $lenY $lenZ)44
-             (setBox 1 $lenX $lenY $lenZ)
+             (setBox (eval 0.96 * $totalMass ) $lenXY $lenXY $lenZ)
              (nd DragController
                (setAngularDrag 0.01)
                (setLinearDrag 0.01)
             )
          )
          (nd SingleMatNode
-             (load 'models/soccerbottorso.obj')
-             ;(setScale (eval 0.5 * $upperLenX) (eval 0.5 * $upperLenY) (eval 0.5 * $upperLenZ))
-             (setScale 0.35 0.35 0.35)
+             (load 'models/Furobox.obj')
+             (setScale (eval 0.5 * $lenXY  ) (eval 0.5 * $lenXY) (eval 0.5 * $lenZ  ))
          )
 
-         ; create the char chassis
-         (nd Transform
-            (setName chassis)
-            (setLocalPos 0 0 .0)
-            ;(importScene rsg/boxspheres/box.rsg 0.75 0.75 0.3 1 matBlack)
-            ;(templ $lenX $lenY $lenZ $totalMass $material)
-         ;   (nd Box
-         ;      (setExtents $lenX $lenY $lenZ)
-         ;      (setMaterial matRed)
-         ;   )
-
-;;Cuerpo visual Rojo Blanco
-;            (nd Transform
-;       	  (setName Back)
-;       	  (setLocalPos 0 (eval $lenY * 0.45 ) 0)
-;           (nd Box
-;             (setExtents $lenX (eval $lenY * 0.1) $lenZ)
-;             (setMaterial matWhite)
-;           )
-;              (nd Transform
-;             (setName Back)
-;             (setLocalPos 0 (eval -0.5 * $lenY  ) 0)
-;             (nd Box
-;              (setExtents $lenX (eval $lenY * 0.9) $lenZ)
-;              (setMaterial matRed)
-;             )
-;             )
-;       	  )
-
-
-            (nd RigidBody
-                (setName boxBody)
-                ;(setBoxTotal $totalMass $lenX $lenY $lenZ)
-                (setBox 1000 $lenX $lenY $lenZ)
-                (nd DragController
-                  (setAngularDrag 0.01)
-                  (setLinearDrag 0.01)
-               )
-            )
-
             (nd BoxCollider
-                (setBoxLengths $lenX $lenY $lenZ)
+                (setBoxLengths $lenXY $lenXY $lenZ)
                 (nd ContactJointHandler
                   (setContactBounceMode false)
 
@@ -92,11 +48,6 @@
 
                )
              )
-         )
-
-         (nd FixedJoint
-            (attach ../chassis/boxBody ../boxBody )
-         )
    ; install a node holding agent state data
          (nd AgentState
             (setName AgentState)
@@ -119,17 +70,17 @@
          (nd SayEffector)
          (nd AgentSyncEffector)
          (nd VisionPerceptor
-            (setSenseMyPos false)
+            (setSenseMyPos true)
             (setStaticSenseAxis false)
             (addNoise false)
          )
       );end of AgentAspect
 
       (nd Transform
-         (setLocalPos .35 0 0.05)
+         (setLocalPos (eval 0.5 * $lenXY  ) 0 0)
          (setName r1)
          (setLocalRotation 0 90 0)
-         (importScene rsg/boxspheres/wheel.rsg 0.3 0.2 20 matDarkGrey)
+         (importScene rsg/boxspheres/wheel.rsg (eval 0.5 * $lenZ  ) (eval 0.2 * $lenXY  ) (eval 0.02 * $totalMass ) matDarkGrey)
          (nd HingeJoint
             (attach ../sphereBody ../../body/boxBody)
             (setAnchor 0.0 0.0 0)
@@ -145,10 +96,10 @@
       )
 
       (nd Transform
-         (setLocalPos -.35 0 0.05)
+         (setLocalPos (eval -0.5 * $lenXY  ) 0 0)
          (setName r3)
          (setLocalRotation 0 90 0)
-         (importScene rsg/boxspheres/wheel.rsg  0.3 0.2 20 matDarkGrey)
+         (importScene rsg/boxspheres/wheel.rsg (eval 0.5 * $lenZ  ) (eval 0.2 * $lenZ  ) (eval 0.02 * $totalMass ) matDarkGrey)
          ; add some boxes to visualize the tire spin
          (nd HingeJoint
             (attach ../sphereBody ../../body/boxBody)
@@ -163,32 +114,5 @@
             (nd HingeEffector (setName er3) )
          )
       )
-
-   		(nd Transform
-         (setName Front)
-         (setLocalPos 0 +.37 -.25)
-         (importScene rsg/boxspheres/sphere.rsg 0.05 2 matBlue)
-
-         (nd SliderJoint
-              (attach ../sphereBody ../../body/boxBody)
-               (setLowStopPos 0 0)
-             (setHighStopPos 0 .05)
-         )
-        )
-
-
-   	  (nd Transform
-   	  (setName Back)
-   	  (setLocalPos 0 -.37 -.25)
-   	  (importScene rsg/boxspheres/sphere.rsg 0.05 2 matBlue)
-
-   	  (nd SliderJoint
-
-   	  	  (attach ../sphereBody ../../body/boxBody)
-   	  		(setLowStopPos 0 0)
-   	  	 (setHighStopPos 0 .05)
-   	  )
-   	  )
-
    );end of nd Space
 )
