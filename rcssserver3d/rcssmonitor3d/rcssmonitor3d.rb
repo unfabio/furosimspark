@@ -16,12 +16,12 @@ end
 sparkAddFPSCamera(
                   $scenePath+'camera',
                   x = 0,
-                  y = -4,
-                  z = 0.6,
+                  y = -16,
+                  z = 4.2,
                   vAngle = 10.0,
                   hAngle = 10.0,
                   maxSpeed = 1.5,
-                  accel = 40.0,
+                  accel = 4.0,
                   drag = 4,
                   addCollider = false,
                   colliderRadius = 2.0
@@ -44,4 +44,3 @@ sparkResetLogging()
 sparkLogErrorToCerr()
 # sparkLogAllToFile('./spark.txt')
 # sparkLogDebugToCerr()
-
