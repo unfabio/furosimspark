@@ -46,6 +46,20 @@ using namespace std;
 #define STR_PM_FREE_KICK_LEFT "free_kick_left"
 #define STR_PM_FREE_KICK_RIGHT "free_kick_right"
 #define STR_PM_Unknown "unknown"
+
+enum VisionObject
+{
+     VO_BALL   = 0,
+     F1L   = 1,
+     G1L   = 2,
+     G2L   = 3,
+     F2L   = 4,
+     F1R   = 5,
+     G1R   = 6,
+     G2R   = 7,
+     F2R   = 8
+};
+
 class SoccerBehavior : public Behavior
 {
 public:
@@ -63,18 +77,7 @@ public:
         VisionSense() : distance(0), theta(0), phi(0) {};
     };
 
-    enum VisionObject
-    {
-         VO_BALL   = 0,
-         F1L   = 1,
-         G1L   = 2,
-         G2L   = 3,
-         F2L   = 4,
-         F1R   = 5,
-         G1R   = 6,
-         G2R   = 7,
-         F2R   = 8
-    };
+
 
 public:
     SoccerBehavior();
@@ -96,11 +99,16 @@ protected:
     std::string Forward() const;
     std::string Kick() const;
     std::string SeekBall() const;
+    std::string Arquero() const;
 
     salt::Vector3f GetPosition(const VisionSense& sense) const;
     salt::Vector3f GetPosition(const VisionObject& obj) const;
     salt::Vector3f GetDriveVec(const VisionSense& vision) const;
+    salt::Vector3f GetDriveVec(const VisionObject& obj) const;
     std::string Ir(const salt::Vector3f& Dir) const;
+
+    VisionObject RotarCancha(const VisionObject& obj) const;
+
 
 protected:
     zeitgeist::Zeitgeist mZG;
