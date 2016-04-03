@@ -401,10 +401,6 @@ SoccerBase::GetBody(const Leaf& base, boost::shared_ptr<RigidBody>& body)
         return false;
     }
 
-    base.GetLog()->Error()
-        << "FABIO: (SoccerBase: " << base.GetName()
-        << ") scene server not found.\n";
-
   return true;
 }
 
