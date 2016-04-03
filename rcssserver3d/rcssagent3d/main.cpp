@@ -297,8 +297,8 @@ ss <<"(init (unum 0)(teamname "<< teamname <<"))(syn)";
 
       switch (unum) {
          case 1:PutMessage ("(beam -25 0 90)");break;
-         case 2:PutMessage ("(beam -15 0 0)");break;
-         case 3:PutMessage ("(beam -6 0 0)");break;
+         case 2:PutMessage ("(beam -10 5 0)");break;
+         case 3:PutMessage ("(beam -10 -5 0)");break;
          case 4:PutMessage ("(beam -4 -4 45)");break;
          case 5:PutMessage ("(beam -4 4 -45)");break;
       }
