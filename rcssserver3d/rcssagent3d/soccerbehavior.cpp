@@ -49,6 +49,16 @@ void SoccerBehavior::SetupVisionObjectMap()
     mVisionObjectMap["G1R"] = G1R;
     mVisionObjectMap["G2R"] = G2R;
     mVisionObjectMap["F2R"] = F2R;
+    mVisionObjectMap["Pleft1"] = Pleft1;
+    mVisionObjectMap["Pleft2"] = Pleft2;
+    mVisionObjectMap["Pleft3"] = Pleft3;
+    mVisionObjectMap["Pleft4"] = Pleft4;
+    mVisionObjectMap["Pleft5"] = Pleft5;
+    mVisionObjectMap["Pright1"] = Pright1;
+    mVisionObjectMap["Pright2"] = Pright2;
+    mVisionObjectMap["Pright3"] = Pright3;
+    mVisionObjectMap["Pright4"] = Pright4;
+    mVisionObjectMap["Pright5"] = Pright5;
 }
 
 string SoccerBehavior::Init()
@@ -90,6 +100,16 @@ void SoccerBehavior::ParseObjectVision(const Predicate& predicate)
         }
 
         // try read the 'id' section
+        string strteam;
+        if (predicate.GetValue(paramIter, "team", strteam)) {
+           if(strteam.find("left")!=std::string::npos){
+             name += "left";
+          }else if(strteam.find("right")!=std::string::npos){
+             name += "right";
+          }
+        }
+
+        // try read the 'id' section
         string strId;
         if (predicate.GetValue(paramIter, "id", strId)) {
             name += strId;
@@ -98,6 +118,7 @@ void SoccerBehavior::ParseObjectVision(const Predicate& predicate)
         // try to lookup the VisionObject
         TVisionObjectMap::iterator visiter = mVisionObjectMap.find(name);
         if (visiter == mVisionObjectMap.end()) {
+           cout<< " no existe name "<< name << endl;
             continue;
         }
 
@@ -250,15 +271,13 @@ string SoccerBehavior::Kick() const
 
 string SoccerBehavior::Arquero() const
 {
-    Vector3f b = GetDriveVec(VO_BALL);
-    VisionObject G1, G2,F1,F2;
 
-     G1=RotarCancha(G1L);
-     G2=RotarCancha(G2L);
+   Vector3f b = GetDriveVec(VO_BALL);
 
-     Vector3f g1 = GetDriveVec(G1);
-     Vector3f g2 = GetDriveVec(G2);
-     Vector3f centro = g1+g2;
+
+     Vector3f g1 = GetDriveVec(RotarCancha(G1L));
+     Vector3f g2 = GetDriveVec(RotarCancha(G2L));
+     Vector3f centro = g1+g2,d1,d2,contrario;
 
      //evitar que quede al costado de la cancha
      if(mMyPos.x()<-24 && gAbs(mMyPos.y())>4){
@@ -270,18 +289,25 @@ string SoccerBehavior::Arquero() const
         return Ir(b);
      }
      //volver al arco si se alejo mucho
-     if(centro.Dot(b)>0 || mMyPos.x()>0 || gAbs(mMyPos.y())>5){
+     if(centro.Dot(b)>0 || mMyPos.x()>-5 || gAbs(mMyPos.y())>6){
         return Ir(centro);
      }
 
-     if(b.Length()<5){
-          return Ir(b);
+     if(b.Length()<10){
+        //Si esta cercar intentar botarla al arco contrario
+          contrario = GetDriveVec(RotarCancha(G1R));
+          contrario.Normalize();
+          if(contrario.Dot(b)>.5){
+             return Ir(b);
+          }
+          return Ir(b-contrario*.5);
      }
-
-     if(g1.Length()>g2.Length()){
-       return Ir(g1+b*.5);
+     d1=b-g1;
+     d2=b-g2;
+     if(d1.Length()<d2.Length()){
+       return Ir(g1+b*.2);
      }else{
-        return Ir(g2+b*.5);
+        return Ir(g2+b*.3);
      }
 
 }
@@ -299,6 +325,8 @@ VisionObject SoccerBehavior::RotarCancha(const VisionObject& obj) const
       case G1R:return G2L;
       case G2R:return G1L;
       case F2R:return F1L;
+      default:
+      return obj;
    }
    return obj;
 }
@@ -321,7 +349,7 @@ string SoccerBehavior::SeekBall() const
     Vector3f Dir = (g1 + g2)/2;
 
 
-      if(mMyPos.x() <-5){
+      if(mMyPos.x() <-10){
          return Ir(Dir);
       }
       /*
@@ -336,8 +364,8 @@ string SoccerBehavior::SeekBall() const
       }
 */
       //Buscar centrar el Balon
-      if(gAbs(mMyPos.y())+mMyPos.x()*2>54){
-         Dir += (GetDriveVec(F2)+GetDriveVec(F1))*.05;
+      if(gAbs(mMyPos.y())+mMyPos.x()>29){
+         Dir += (GetDriveVec(F2)+GetDriveVec(F1))*.01;
       }
 
    Dir-=b;
@@ -358,6 +386,61 @@ string SoccerBehavior::SeekBall() const
     }
    else {
       fact = -b.Length() *.5;
+      Dir = Dir *fact + b;
+   }
+   return Ir(Dir);
+}
+string SoccerBehavior::Defensa() const
+{
+    // const VisionSense& vision = GetVisionSense(VO_BALL);
+
+    Vector3f b = GetDriveVec(VO_BALL);
+    VisionObject G1, G2,F1,F2;
+
+     G1=RotarCancha(G1R);
+     G2=RotarCancha(G2R);
+     F1=RotarCancha(F1L);
+     F2=RotarCancha(F2L);
+
+    Vector3f g1 = GetDriveVec(G1);
+    Vector3f g2 = GetDriveVec(G2);
+    Vector3f Dir = (g1 + g2)/2;
+
+
+      if(mMyPos.x() <-24){
+         return Ir(Dir);
+      }
+
+
+
+   Dir-=b;
+   Dir = Dir.Normalize();
+
+   //Buscar centrar el Balon
+   if(mMyPos.x()>0){
+      if (unum%2==0) {
+         return Ir(b+GetDriveVec(RotarCancha(G1L)));
+      }else {
+         return Ir(b+GetDriveVec(RotarCancha(G2L)));
+      }
+   }
+
+
+    float Pesc = Dir.Dot(b)/ b.Length(), fact=0;
+   // cout << " Pesc " << Pesc <<" b.Length() " << b.Length() << endl;
+    if (Pesc < 0.3 && b.Length() < 2) {
+        if (unum%2==0) {
+            Dir = GetDriveVec(F1);
+        }else {
+            Dir = GetDriveVec(F2);
+        }
+        Dir = Dir.Normalize()-b.Normalize();
+    }
+    else if(Pesc>0.5 && b.Length()<10) {
+        Dir = Dir + b;
+    }
+   else {
+      fact = -b.Length() *.1;
       Dir = Dir *fact + b;
    }
    return Ir(Dir);
@@ -426,10 +509,11 @@ string SoccerBehavior::Think(const std::string& message)
          return Arquero();
       case 2:
       case 3:
-         return "(er1 -100)(er3 100)";
+         return Defensa();
       case 4:
       case 5:
          return SeekBall();
    }
 
+       return "(er1 0)(er3 0)";
 }

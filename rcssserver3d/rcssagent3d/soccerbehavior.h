@@ -57,7 +57,17 @@ enum VisionObject
      F1R   = 5,
      G1R   = 6,
      G2R   = 7,
-     F2R   = 8
+     F2R   = 8,
+     Pleft1,
+     Pleft2,
+     Pleft3,
+     Pleft4,
+     Pleft5,
+     Pright1,
+     Pright2,
+     Pright3,
+     Pright4,
+     Pright5
 };
 
 class SoccerBehavior : public Behavior
@@ -100,6 +110,7 @@ protected:
     std::string Kick() const;
     std::string SeekBall() const;
     std::string Arquero() const;
+    std::string Defensa() const;
 
     salt::Vector3f GetPosition(const VisionSense& sense) const;
     salt::Vector3f GetPosition(const VisionObject& obj) const;
