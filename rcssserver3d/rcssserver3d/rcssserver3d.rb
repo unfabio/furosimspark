@@ -46,6 +46,11 @@ run "scripts/bindings.rb"
 
 # setup default materials common to all simulations
 run "scripts/materials.rb"
+# run "scripts/rcs-materials-textures.rb"
+
+sparkGetOpenGLServer()
+sparkGetImageServer()
+sparkGetTextureServer()
 
 #
 # uncomment for logging setup (see spark.rb for reference)

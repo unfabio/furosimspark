@@ -1,10 +1,12 @@
-# 
+#
 # materials.rb -- create custom materials for simspark
 #
 
 #----------------------------------------------------------------
 # special purpose materials
 #----------------------------------------------------------------
+
+print " Run rcs-materials-textures.rbr\n\n";
 
 
 # ball
@@ -27,7 +29,7 @@ material.setAmbient(0.2,0.01,0.0,1.0)
 # material.setAmbient(0.1,0.3,0.1,1.0)
 # material.setDiffuseTexture('textures/rcs-grass.png');
 
-# with lines 
+# with lines
 material = sparkCreate('kerosin/Material2DTexture', $serverPath+'material/matGrass');
 material.setDiffuse(1.0,1.0,1.0,1.0)
 material.setAmbient(0.5,0.5,0.5,1.0)
@@ -163,4 +165,3 @@ material = sparkCreate('kerosin/Material2DTexture', $serverPath+'material/matRig
 material.setDiffuse(1.0,0.0,0.75,1.0)
 material.setAmbient(0.2,0.0,0.15,1.0)
 material.setDiffuseTexture('textures/rcs-torso-11.png')
-
