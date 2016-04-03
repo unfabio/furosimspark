@@ -66,7 +66,7 @@ bool Material2DTexture::LoadTexture(const std::string& texName, boost::shared_pt
     if (textureServer.get() == 0)
         {
             GetLog()->Error()
-                << "(Material2DTexture) ERROR: cannot find TextureServer\n";
+                << "(Material2DTexture) ERROR: cannot find TextureServer ("<<texName <<")\n";
             return false;
         }
 
@@ -168,4 +168,3 @@ void Material2DTexture::Bind()
         mTexSpecular->Bind();
     }
 }
-
