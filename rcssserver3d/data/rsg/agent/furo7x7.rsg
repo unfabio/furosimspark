@@ -27,7 +27,7 @@
                (setLinearDrag 0.01)
             )
          )
-         (nd SingleMatNode
+         (nd StaticMesh
              (load 'models/Furobox.obj')
              (setScale (eval 0.5 * $lenXY  ) (eval 0.5 * $lenXY) (eval 0.5 * $lenZ  ))
          )
