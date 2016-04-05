@@ -227,7 +227,7 @@ bool SoccerBehavior::GameState(const Predicate& predicate)
     if (!predicate.FindParameter(iter3, "pm")) {
         return false;
     }
-    // read my position
+
     predicate.GetValue(iter3, Estado);
 
    if (Estado ==STR_PM_PlayOn) {
@@ -363,7 +363,7 @@ string SoccerBehavior::SeekBall() const
          }
       }
 */
-      //Buscar centrar el Balon
+      //Buscar centrar el Balon si esta cerca de las esquinas del contrario
       if(gAbs(mMyPos.y())+mMyPos.x()>29){
          Dir += (GetDriveVec(F2)+GetDriveVec(F1))*.01;
       }
@@ -407,10 +407,9 @@ string SoccerBehavior::Defensa() const
     Vector3f Dir = (g1 + g2)/2;
 
 
-      if(mMyPos.x() <-24){
+      if(mMyPos.x() <-25){
          return Ir(Dir);
       }
-
 
 
    Dir-=b;
@@ -453,7 +452,7 @@ string SoccerBehavior::Ir(const salt::Vector3f& Dir) const
        float v1 = 0;
        float v2 = 0;
        float vmax = 0;
-       if (d > 90) {
+       if (d > 90) {//andar en reversa
           if (theta > 0) {
              theta -= 180;
           }
@@ -461,10 +460,12 @@ string SoccerBehavior::Ir(const salt::Vector3f& Dir) const
              theta += 180;
           }
           d-=90;
-          vmax=d*d/200-10;
-       }else{
+          if(d>70)
+          vmax=d*d/20;
+       }else{//andar bien
           d=90-d;
-          vmax=-d*d/200+10;
+          if(d>70)
+          vmax=-d*d/20;
        }
        v1 = vmax - theta*.3;
        v2 = vmax + theta*.3;
