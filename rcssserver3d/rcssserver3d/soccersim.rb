@@ -44,7 +44,7 @@ addSoccerVar('FieldHeight', 40.0)
 addSoccerVar('GoalWidth', 9.0)
 addSoccerVar('GoalDepth', 2.0)
 #addSoccerVar('GoalHeight', 2.44) # FIFA: 2.44
-addSoccerVar('GoalHeight', 4.0)
+addSoccerVar('GoalHeight', 1.0)
 addSoccerVar('PenaltyLength',8)
 addSoccerVar('PenaltyWidth',10.5)
 addSoccerVar('BorderSize', 5.0)
