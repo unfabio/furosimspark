@@ -4,25 +4,9 @@
 (
  (templ $radius $length $totalMass $material)
 
-       (nd Cylinder
-     (setParams 1.0 1.0)
-     (setScale $radius $radius $length )
-
-     (setMaterial $material)
-     )
-     (nd Box
-     (setExtents $radius 0.01 0.01)
-     (setMaterial matOrange)
-     )
-
-     (nd Box
-     (setExtents 0.01 $radius 0.01)
-     (setMaterial matRed)
-     )
-
-     (nd Box
-     (setExtents 0.01 0.01 $radius)
-     (setMaterial matYellow)
+     (nd StaticMesh
+        (load 'models/cilindro.obj')
+        (setScale $radius $radius $length)
      )
 
  (nd RigidBody

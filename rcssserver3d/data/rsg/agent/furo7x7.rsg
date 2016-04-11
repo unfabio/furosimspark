@@ -1,5 +1,4 @@
 ; -*- mode: lisp; -*-
-
 ;
 ; this file constructs a newfuro, the connected agent controlls
 ; two joint motor
@@ -31,21 +30,16 @@
              (load 'models/Furobox.obj')
              (setScale (eval 0.5 * $lenXY  ) (eval 0.5 * $lenXY) (eval 0.5 * $lenZ  ))
          )
-
             (nd BoxCollider
                 (setBoxLengths $lenXY $lenXY $lenZ)
                 (nd ContactJointHandler
                   (setContactBounceMode false)
-
                   (setContactSlipMode true)
                   (setContactSlip 0.1 0.1)
-
                   (setContactSoftERPMode true)
                   (setContactSoftERP 0.2)
-
                   (setContactSoftCFM true)
                   (setContactSoftCFM 0.01)
-
                )
              )
    ; install a node holding agent state data
@@ -75,12 +69,11 @@
             (addNoise false)
          )
       );end of AgentAspect
-
       (nd Transform
-         (setLocalPos (eval 0.5 * $lenXY  ) 0 0)
+         (setLocalPos (eval 0.55 * $lenXY  ) 0 0)
          (setName r1)
          (setLocalRotation 0 90 0)
-         (importScene rsg/boxspheres/wheel.rsg (eval 0.35 * $lenZ  ) (eval 0.2 * $lenXY  ) (eval 0.02 * $totalMass ) matDarkGrey)
+         (importScene rsg/boxspheres/wheel.rsg (eval 0.35 * $lenZ  ) (eval 0.35 * $lenXY  ) (eval 0.02 * $totalMass ) matDarkGrey)
          (nd HingeJoint
             (attach ../sphereBody ../../body/boxBody)
             (setAnchor 0.0 0.0 0)
@@ -94,12 +87,11 @@
             (nd HingeEffector (setName er1) )
          )
       )
-
       (nd Transform
-         (setLocalPos (eval -0.5 * $lenXY  ) 0 0)
+         (setLocalPos (eval -0.55 * $lenXY  ) 0 0)
          (setName r3)
          (setLocalRotation 0 90 0)
-         (importScene rsg/boxspheres/wheel.rsg (eval 0.35 * $lenZ  ) (eval 0.2 * $lenZ  ) (eval 0.02 * $totalMass ) matDarkGrey)
+         (importScene rsg/boxspheres/wheel.rsg (eval 0.35 * $lenZ  ) (eval 0.35 * $lenZ  ) (eval 0.02 * $totalMass ) matDarkGrey)
          ; add some boxes to visualize the tire spin
          (nd HingeJoint
             (attach ../sphereBody ../../body/boxBody)
