@@ -58,7 +58,7 @@
 
 ; add lights
  (nd Transform
-       (setLocalPos -10 10 10)
+       (setLocalPos -30 -20 10)
        (nd Light
 	     (setDiffuse 1.0 1.0 1.0 1.0)
 	     (setSpecular 0.1 0.1 0.1 1.0)
@@ -67,15 +67,33 @@
 
        )
 
-; add lights
  (nd Transform
-       (setLocalPos 10 -10 10)
+       (setLocalPos 30 20 10)
        (nd Light
 	     (setDiffuse 1.0 1.0 1.0 1.0)
 	     (setSpecular 0.1 0.1 0.1 1.0)
 	     (setAmbient 0.0 0.0 0.0 1.0)
 	     )
        )
+       ; add lights
+  (nd Transform
+        (setLocalPos 30 -20 10)
+        (nd Light
+ 	     (setDiffuse 1.0 1.0 1.0 1.0)
+ 	     (setSpecular 0.1 0.1 0.1 1.0)
+ 	     (setAmbient 0.8 0.8 0.8 1.0)
+ 	     )
+
+        )
+
+  (nd Transform
+        (setLocalPos -30 20 10)
+        (nd Light
+ 	     (setDiffuse 1.0 1.0 1.0 1.0)
+ 	     (setSpecular 0.1 0.1 0.1 1.0)
+ 	     (setAmbient 0.0 0.0 0.0 1.0)
+ 	     )
+        )
 
 ; create the base plane
  (nd Transform
