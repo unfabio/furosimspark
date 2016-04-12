@@ -104,6 +104,7 @@ protected:
     bool GameState(const oxygen::Predicate& predicate);
     void SetupVisionObjectMap();
 
+    std::string Motores( float v1=0, float v2=0) const;
     std::string TurnLeft() const;
     std::string TurnRight() const;
     std::string Forward() const;
@@ -136,6 +137,8 @@ protected:
     // the players position
     salt::Vector3f mMyPos;
     string team = "";
+    VisionObject Equipo[5];
+    VisionObject EquipoOp[5];
     string Estado= "";
     int unum = 0;
 };

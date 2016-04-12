@@ -74,11 +74,7 @@ string SoccerBehavior::Init()
 
     // use the scene effector to build the agent and beam to a
     // position near the center of the playing field
-    return
-    //     "(scene rsg/agent/soccerplayer.rsg)" ;
-    "(scene rsg/agent/furo7x7.rsg)";
-    //  "(beam -6 0 0)";
-    ;
+    return "(scene rsg/agent/furo7x7.rsg)";
 }
 
 void SoccerBehavior::ParseObjectVision(const Predicate& predicate)
@@ -118,7 +114,7 @@ void SoccerBehavior::ParseObjectVision(const Predicate& predicate)
         // try to lookup the VisionObject
         TVisionObjectMap::iterator visiter = mVisionObjectMap.find(name);
         if (visiter == mVisionObjectMap.end()) {
-           cout<< " no existe name "<< name << endl;
+          // cout<< " no existe name "<< name << endl;
             continue;
         }
 
@@ -223,6 +219,20 @@ bool SoccerBehavior::GameState(const Predicate& predicate)
          predicate.GetValue(iter2, team);
           cout << "FindParameter team: " << team << endl;
     }
+
+
+    VisionObject Objetos[] = {Pleft1,Pleft2,Pleft3,Pleft4,Pleft5,Pright1,Pright2,Pright3,Pright4,Pright5};
+    for(int i=0;i<5;i++){
+      if(team == "right"){
+         Equipo[i]=Objetos[i+5];
+         EquipoOp[i]=Objetos[i];
+      }else{
+         Equipo[i]=Objetos[i];
+         EquipoOp[i]=Objetos[i+5];
+      }
+    }
+
+
     Predicate::Iterator iter3(predicate);
     if (!predicate.FindParameter(iter3, "pm")) {
         return false;
@@ -247,25 +257,21 @@ bool SoccerBehavior::GameState(const Predicate& predicate)
 
 string SoccerBehavior::TurnLeft() const
 {
-    //     std::cerr << "turn left" << std::endl;
-    return "(er1 -10)(er3 10)";
+    return Motores(-10,10);
 }
 
 string SoccerBehavior::TurnRight() const
 {
-    //     std::cerr << "turn right" << std::endl;
-    return "(er1 10)(er3 -10)";
+    return Motores(10,-10);
 }
 
 string SoccerBehavior::Forward() const
 {
-    //     std::cerr << "forward" << std::endl;
-    return "(er1 -15)(er3 -15)";
+    return Motores(-15,15);
 }
 
 string SoccerBehavior::Kick() const
 {
-    //     std::cerr << "kick";
     return "(kick 0  10)";
 }
 
@@ -273,7 +279,6 @@ string SoccerBehavior::Arquero() const
 {
 
    Vector3f b = GetDriveVec(VO_BALL);
-
 
      Vector3f g1 = GetDriveVec(RotarCancha(G1L));
      Vector3f g2 = GetDriveVec(RotarCancha(G2L));
@@ -284,15 +289,15 @@ string SoccerBehavior::Arquero() const
         return Ir(GetDriveVec(RotarCancha(G1R)));
      }
 
-     //no se salga de la meta
-     if(mMyPos.x()<-25 ){
-        return Ir(b);
-     }
+
      //volver al arco si se alejo mucho
      if(centro.Dot(b)>0 || mMyPos.x()>-5 || gAbs(mMyPos.y())>6){
         return Ir(centro);
      }
-
+     //no se salga de la meta
+     if(mMyPos.x()<-26 ){
+        return Ir(b);
+     }
      if(b.Length()<10){
         //Si esta cercar intentar botarla al arco contrario
           contrario = GetDriveVec(RotarCancha(G1R));
@@ -305,9 +310,9 @@ string SoccerBehavior::Arquero() const
      d1=b-g1;
      d2=b-g2;
      if(d1.Length()<d2.Length()){
-       return Ir(g1+b*.2);
+       return Ir(g1+g2*.5+b*.3);
      }else{
-        return Ir(g2+b*.3);
+        return Ir(g2+g1*.5+b*.3);
      }
 
 }
@@ -325,6 +330,16 @@ VisionObject SoccerBehavior::RotarCancha(const VisionObject& obj) const
       case G1R:return G2L;
       case G2R:return G1L;
       case F2R:return F1L;
+      case Pleft1:return Pright1;
+      case Pleft2:return Pright2;
+      case Pleft3:return Pright3;
+      case Pleft4:return Pright4;
+      case Pleft5:return Pright5;
+      case Pright1:return Pleft1;
+      case Pright2:return Pleft2;
+      case Pright3:return Pleft3;
+      case Pright4:return Pleft4;
+      case Pright5:return Pleft5;
       default:
       return obj;
    }
@@ -348,23 +363,12 @@ string SoccerBehavior::SeekBall() const
     Vector3f g2 = GetDriveVec(G2);
     Vector3f Dir = (g1 + g2)/2;
 
-
-      if(mMyPos.x() <-10){
+      if(mMyPos.x() <-10 && b.Length()>5){
          return Ir(Dir);
       }
-      /*
-      if (unum%2==0) {
-         if(mMyPos.y()<-10){
-           return Ir((GetDriveVec(F1)+g1)/2);
-         }
-      }else {
-         if(mMyPos.y()>10){
-           return Ir((GetDriveVec(F2)+g2)/2);
-         }
-      }
-*/
+
       //Buscar centrar el Balon si esta cerca de las esquinas del contrario
-      if(gAbs(mMyPos.y())+mMyPos.x()>29){
+      if(gAbs(mMyPos.y())+mMyPos.x()>28){
          Dir += (GetDriveVec(F2)+GetDriveVec(F1))*.01;
       }
 
@@ -381,11 +385,11 @@ string SoccerBehavior::SeekBall() const
         }
         Dir = Dir.Normalize()-b.Normalize();
     }
-    else if(Pesc>0.75 && b.Length()<10) {
+    else if(Pesc>0.75 && b.Length()<5) {
         Dir = Dir + b;
     }
    else {
-      fact = -b.Length() *.5;
+      fact = -b.Length() *.5-1;
       Dir = Dir *fact + b;
    }
    return Ir(Dir);
@@ -406,24 +410,21 @@ string SoccerBehavior::Defensa() const
     Vector3f g2 = GetDriveVec(G2);
     Vector3f Dir = (g1 + g2)/2;
 
-
       if(mMyPos.x() <-25){
          return Ir(Dir);
       }
-
 
    Dir-=b;
    Dir = Dir.Normalize();
 
    //Buscar centrar el Balon
-   if(mMyPos.x()>0){
+   if(mMyPos.x()>0 && b.Length()>3){
       if (unum%2==0) {
          return Ir(b+GetDriveVec(RotarCancha(G1L)));
       }else {
          return Ir(b+GetDriveVec(RotarCancha(G2L)));
       }
    }
-
 
     float Pesc = Dir.Dot(b)/ b.Length(), fact=0;
    // cout << " Pesc " << Pesc <<" b.Length() " << b.Length() << endl;
@@ -435,7 +436,7 @@ string SoccerBehavior::Defensa() const
         }
         Dir = Dir.Normalize()-b.Normalize();
     }
-    else if(Pesc>0.5 && b.Length()<10) {
+    else if(Pesc>0.75 && b.Length()<10) {
         Dir = Dir + b;
     }
    else {
@@ -447,34 +448,64 @@ string SoccerBehavior::Defensa() const
 
 string SoccerBehavior::Ir(const salt::Vector3f& Dir) const
 {
-       double theta = salt::gArcTan2(Dir[1], Dir[0]) * 57.2957;
+   Vector3f vObj,vObjb,nDir=Dir,b = GetDriveVec(VO_BALL);
+   float Dis=vObj.Length();
+
+   for(int i=0;i<5;i++){
+      vObj = GetDriveVec(Equipo[i]);
+      Dis = vObj.Length();
+      vObjb=vObj-b;
+      if(Dis>0.1 && Dis<10 && b.Length()>vObjb.Length()){
+            vObj.Normalize();
+            vObj*= 5.0/(Dis*Dis);
+            nDir-=vObj;
+      }
+   }
+   for(int i=0;i<5;i++){
+      vObj = GetDriveVec(EquipoOp[i]);
+      Dis = vObj.Length();
+      if(Dis>0.1 && Dis<2 && b.Length()+1>Dis){
+         vObj.Normalize();
+         vObj*= 1.0/(Dis*Dis);
+         nDir-=vObj;
+      }
+   }
+
+       double theta = salt::gArcTan2(nDir[1], nDir[0]) * 57.2957;
        float d = gAbs(theta);
        float v1 = 0;
        float v2 = 0;
        float vmax = 0;
-       if (d > 90) {//andar en reversa
+      /* if (d > 90) {//andar en reversa
           if (theta > 0) {
              theta -= 180;
           }
           else {
              theta += 180;
           }
-          d-=90;
-          if(d>70)
-          vmax=d*d/20;
-       }else{//andar bien
-          d=90-d;
-          if(d>70)
-          vmax=-d*d/20;
+          //d max 180
+          if(d>160){
+             d-=160;
+             vmax=d*d*0.004;
+          }
+       }else*/{//andar bien
+          if(d<20){
+             d=20-d;
+             vmax=-d*d*0.4;
+         }
        }
        v1 = vmax - theta*.3;
        v2 = vmax + theta*.3;
-       stringstream ss;
-       //ss <<"(syn)" << endl;
-       ss << "(er1 " << v1 << ")(er3 " << v2 << ")";
-       return ss.str();
+
+       return Motores(v1,v2);
 }
 
+std::string SoccerBehavior::Motores( float v1, float v2) const
+{
+   stringstream ss;
+   ss << "(er1 " << v1 << ")(er3 " << v2 << ")";
+   return ss.str();
+}
 string SoccerBehavior::Think(const std::string& message)
 {
 
@@ -499,12 +530,28 @@ string SoccerBehavior::Think(const std::string& message)
             else if (predicate.name == "GS") {
 
                 if (!GameState(predicate)) {
-                    return "(er1 0)(er3 0)";
+                    return Motores();
                 }
             }
         }
     }
+/*
+ Vector3f fl = GetDriveVec(F1L)+GetDriveVec(F2R);
+ Vector3f pos(1,0,0);
+//mMyPos
 
+ salt::Matrix mat;
+ mat.Identity();
+ //mat.RotateZ(salt::gArcTan2(mMyPos[1], mMyPos[0]));
+ mat.RotateZ(-salt::gArcTan2(fl[1]-mMyPos[1], fl[0]-mMyPos[0]));
+
+// mat.RotateZ(salt::gArcTan2(mMyPos[1], mMyPos[0]));
+pos = mat.Rotate(pos);
+ //cout << " mat.dump " << Pesc <<" b.Length() " << b.Length() << endl;
+
+return Ir(pos);
+//     double theta = salt::gArcTan2(f1l[1], f1l[0]) * 57.2957;
+*/
    switch (unum) {
       case 1:
          return Arquero();
@@ -516,5 +563,5 @@ string SoccerBehavior::Think(const std::string& message)
          return SeekBall();
    }
 
-       return "(er1 0)(er3 0)";
+       return Motores();
 }
