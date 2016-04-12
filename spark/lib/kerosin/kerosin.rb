@@ -12,7 +12,7 @@
 # This section contains information about the application being executed.
 #
 
-createVariable('Application.Title', 'SimSpark');
+createVariable('Application.Title', 'FuroSimSpark');
 
 
 ####
