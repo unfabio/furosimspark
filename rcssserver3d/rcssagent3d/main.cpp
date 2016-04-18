@@ -29,11 +29,11 @@
 #include "behavior.h"
 #include <boost/scoped_ptr.hpp>
 #include "soccerbehavior.h"
-#include "soccerbotbehavior.h"
-#include "carbehavior.h"
+// #include "soccerbotbehavior.h"
+// #include "carbehavior.h"
 //#include "leggedspherebehavior.h"
-#include "hoap2behavior.h"
-#include "naobehavior.h"
+// #include "hoap2behavior.h"
+// #include "naobehavior.h"
 
 #ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
@@ -275,40 +275,30 @@ bool GetMessage(string& msg)
     return true;
 }
 
-void Run()
-{
-    //scoped_ptr<Behavior> behavior(new SoccerbotBehavior());
+void Run() {
     scoped_ptr<Behavior> behavior(new SoccerBehavior());
-    //scoped_ptr<Behavior> behavior(new CarBehavior());
-    //scoped_ptr<Behavior> behavior(new LeggedSphereBehavior());
-    //scoped_ptr<Behavior> behavior(new Hoap2Behavior());
-    //scoped_ptr<Behavior> behavior(new NaoBehavior());
-
-    PutMessage(behavior->Init());
     string msg;
-
-GetMessage(msg);
-
-stringstream ss;
-
-ss <<"(init (unum 0)(teamname "<< teamname <<"))(syn)";
-
-   PutMessage(ss.str());
-
-      switch (unum) {
-         case 1:PutMessage ("(beam -25 0 90)");break;
-         case 2:PutMessage ("(beam -10 5 0)");break;
-         case 3:PutMessage ("(beam -10 -5 0)");break;
-         case 4:PutMessage ("(beam -4 -4 45)");break;
-         case 5:PutMessage ("(beam -4 4 -45)");break;
-      }
-srand (time(NULL));
-
-    while (gLoop)
-        {
-            GetMessage(msg);
-            PutMessage(behavior->Think(msg));
-        }
+    stringstream ss;
+    PutMessage(behavior->Init());
+    GetMessage(msg);
+    ss << "(init (unum 0)(teamname " << teamname << "))";
+    switch (unum) {
+        case 1:ss << "(beam -25 0 90)";
+            break;
+        case 2:ss << "(beam -15 2 0)";
+            break;
+        case 3:ss << "(beam -15 -2 0)";
+            break;
+        case 4:ss << "(beam -5 -4 45)";
+            break;
+        case 5:ss << "(beam -5 4 -45)";
+            break;
+    }
+    PutMessage(ss.str());
+    while (gLoop) {
+        GetMessage(msg);
+        PutMessage(behavior->Think(msg));
+    }
 }
 
 int
