@@ -69,13 +69,13 @@ void SoccerInput::OnLink()
     scriptServer->CreateVariable("Command.Zero", CmdZero);
     scriptServer->CreateVariable("Command.Left", CmdLeft);
     scriptServer->CreateVariable("Command.Right", CmdRight);
-    
+
     scriptServer->CreateVariable("Command.PlayerSelectMode", CmdPlayerSelectMode);
     scriptServer->CreateVariable("Command.SelectNextAgent", CmdSelectNextAgent);
     scriptServer->CreateVariable("Command.ResetSelection", CmdResetSelection);
     scriptServer->CreateVariable("Command.KillSelection", CmdKillSelection);
     scriptServer->CreateVariable("Command.ReposSelection", CmdReposSelection);
-    
+
     mMonitorClient = dynamic_pointer_cast<NetClient>
         (GetCore()->Get("/sys/server/simulation/SparkMonitorClient"));
 
@@ -136,35 +136,35 @@ void SoccerInput::ProcessInput(const Input& input)
                 mCmdMode = CmdModePlayerSelect;
             }
             break;
-        
+
         case CmdSelectNextAgent:
             if (input.GetKeyPress())
                 {
                     SendCommand("(select)");
                 }
             break;
-        
+
         case CmdResetSelection:
             if (input.GetKeyPress())
                 {
                     SendCommand("(select (unum -1))");
                 }
             break;
-            
+
         case CmdKillSelection:
             if (input.GetKeyPress())
                 {
                     SendCommand("(kill)");
                 }
             break;
-            
+
         case CmdReposSelection:
             if (input.GetKeyPress())
                 {
                     SendCommand("(repos)");
                 }
             break;
-            
+
         case CmdKickOff:
             if (input.GetKeyPress())
                 {
@@ -177,7 +177,7 @@ void SoccerInput::ProcessInput(const Input& input)
                     SendCommand("(kickOff Right)");
                 }
             break;
-           
+
         case CmdMoveAgent:
             if (input.GetKeyPress())
                 {
@@ -272,14 +272,14 @@ void SoccerInput::SelectCamera(int idx)
 
     boost::shared_ptr<SoccerMonitor> soccerMonitor =
         static_pointer_cast<SoccerMonitor>(soccerMonitorList.front());
-    
+
     salt::Vector2f fieldSize = soccerMonitor->GetFieldSize();
 
     switch (idx)
     {
         case 0:
             {
-                salt::Vector3f pos(-fieldSize.x()*0.8, 0.0, fieldSize.x()*0.4);
+                salt::Vector3f pos(-fieldSize.x()*0.6, 0.0, fieldSize.x()*0.15);
                 mCameraBody->SetPosition(pos);
                 mFPS->SetHAngleDeg(90);
                 mFPS->SetVAngleDeg(35);
@@ -287,9 +287,9 @@ void SoccerInput::SelectCamera(int idx)
             break;
         case 1:
             {
-                salt::Vector3f pos(-fieldSize.x()*0.8, -fieldSize.y(), fieldSize.x()*0.4);
+                salt::Vector3f pos(-fieldSize.x()*0.6, -fieldSize.y()*0.8, fieldSize.x()*0.3);
                 mCameraBody->SetPosition(pos);
-                mFPS->SetHAngleDeg(50);
+                mFPS->SetHAngleDeg(40);
                 mFPS->SetVAngleDeg(30);
             }
             break;
@@ -303,10 +303,11 @@ void SoccerInput::SelectCamera(int idx)
             break;
         case 3:
             {
-                salt::Vector3f pos(0, -fieldSize.y()*1.1, fieldSize.x()*0.6);
+                //salt::Vector3f pos(0, -fieldSize.y()*1.1, fieldSize.x()*0.6);
+                salt::Vector3f pos(0, -fieldSize.y()*0.3, fieldSize.x());
                 mCameraBody->SetPosition(pos);
                 mFPS->SetHAngleDeg(0);
-                mFPS->SetVAngleDeg(45);
+                mFPS->SetVAngleDeg(80);
             }
             break;
         case 4:
@@ -319,15 +320,15 @@ void SoccerInput::SelectCamera(int idx)
             break;
         case 5:
             {
-                salt::Vector3f pos(fieldSize.x()*0.8, -fieldSize.y(), fieldSize.x()*0.4);
+                salt::Vector3f pos(fieldSize.x()*0.6, -fieldSize.y()*0.8, fieldSize.x()*0.3);
                 mCameraBody->SetPosition(pos);
-                mFPS->SetHAngleDeg(-50);
+                mFPS->SetHAngleDeg(-40);
                 mFPS->SetVAngleDeg(30);
             }
             break;
         case 6:
             {
-                salt::Vector3f pos(fieldSize.x()*0.8, 0.0, fieldSize.x()*0.4);
+                salt::Vector3f pos(fieldSize.x()*0.6, 0.0, fieldSize.x()*0.15);
                 mCameraBody->SetPosition(pos);
                 mFPS->SetHAngleDeg(-90);
                 mFPS->SetVAngleDeg(35);
