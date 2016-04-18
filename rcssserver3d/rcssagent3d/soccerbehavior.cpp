@@ -305,7 +305,7 @@ string SoccerBehavior::Arquero() const
           if(contrario.Dot(b)>.5){
              return Ir(b);
           }
-          return Ir(b-contrario*.5);
+          return Ir(b-contrario);
      }
      d1=b-g1;
      d2=b-g2;
@@ -436,11 +436,11 @@ string SoccerBehavior::Defensa() const
         }
         Dir = Dir.Normalize()-b.Normalize();
     }
-    else if(Pesc>0.75 && b.Length()<10) {
+    else if(Pesc>0.75 && b.Length()<5) {
         Dir = Dir + b;
     }
    else {
-      fact = -b.Length() *.1;
+      fact = -b.Length() *.7;
       Dir = Dir *fact + b;
    }
    return Ir(Dir);
@@ -476,7 +476,7 @@ string SoccerBehavior::Ir(const salt::Vector3f& Dir) const
        float v1 = 0;
        float v2 = 0;
        float vmax = 0;
-      /* if (d > 90) {//andar en reversa
+       if (d > 90) {//andar en reversa
           if (theta > 0) {
              theta -= 180;
           }
@@ -486,12 +486,12 @@ string SoccerBehavior::Ir(const salt::Vector3f& Dir) const
           //d max 180
           if(d>160){
              d-=160;
-             vmax=d*d*0.004;
+             vmax=d*d*0.6;
           }
-       }else*/{//andar bien
+       }else{//andar bien
           if(d<20){
              d=20-d;
-             vmax=-d*d*0.4;
+             vmax=-d*d*0.6;
          }
        }
        v1 = vmax - theta*.3;
