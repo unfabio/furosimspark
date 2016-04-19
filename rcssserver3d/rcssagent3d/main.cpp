@@ -24,16 +24,12 @@
 #include <iostream>
 #include <sstream>
 #include <rcssnet/tcpsocket.hpp>
-//#include <rcssnet/udpsocket.hpp>
 #include <rcssnet/exception.hpp>
-#include "behavior.h"
 #include <boost/scoped_ptr.hpp>
-#include "soccerbehavior.h"
-// #include "soccerbotbehavior.h"
-// #include "carbehavior.h"
-//#include "leggedspherebehavior.h"
-// #include "hoap2behavior.h"
-// #include "naobehavior.h"
+#include "estrategias/sbarquero.h"
+#include "estrategias/sbdefensa.h"
+#include "estrategias/sbdelantero.h"
+
 
 #ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
@@ -276,24 +272,32 @@ bool GetMessage(string& msg)
 }
 
 void Run() {
-    scoped_ptr<Behavior> behavior(new SoccerBehavior());
+    SoccerBehavior *p;
     string msg;
     stringstream ss;
-    PutMessage(behavior->Init());
-    GetMessage(msg);
     ss << "(init (unum 0)(teamname " << teamname << "))";
     switch (unum) {
         case 1:ss << "(beam -25 0 90)";
+            p= (SoccerBehavior*) new SBArquero();
             break;
         case 2:ss << "(beam -15 2 0)";
+            p= (SoccerBehavior*) new SBDefensa();
             break;
         case 3:ss << "(beam -15 -2 0)";
+            p= (SoccerBehavior*) new SBDefensa();
             break;
         case 4:ss << "(beam -5 -4 45)";
+            p= (SoccerBehavior*) new SBDelantero();
             break;
         case 5:ss << "(beam -5 4 -45)";
+            p= (SoccerBehavior*) new SBDelantero();
             break;
+         default:
+         return;
     }
+    scoped_ptr<Behavior> behavior(p);
+    PutMessage(behavior->Init());
+    GetMessage(msg);
     PutMessage(ss.str());
     while (gLoop) {
         GetMessage(msg);

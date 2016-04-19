@@ -7,6 +7,12 @@ set(rcssagent3d_SRCS
    soccerbehavior.cpp
    soccerbotbehavior.h
    soccerbotbehavior.cpp
+   estrategias/sbarquero.h
+   estrategias/sbarquero.cpp
+   estrategias/sbdefensa.h
+   estrategias/sbdefensa.cpp
+   estrategias/sbdelantero.h
+   estrategias/sbdelantero.cpp
    hoap2behavior.h
    hoap2behavior.cpp
    naobehavior.h

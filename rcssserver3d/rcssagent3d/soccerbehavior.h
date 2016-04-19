@@ -105,6 +105,7 @@ protected:
     void SetupVisionObjectMap();
 
     std::string Motores( float v1=0, float v2=0) const;
+    virtual std::string Accion() const;
     std::string TurnLeft() const;
     std::string TurnRight() const;
     std::string Forward() const;

@@ -318,6 +318,11 @@ string SoccerBehavior::Arquero() const
 
 }
 
+string SoccerBehavior::Accion() const
+{
+    return Motores();
+}
+
 VisionObject SoccerBehavior::RotarCancha(const VisionObject& obj) const {
     if (team == "left")
         return obj;
@@ -526,33 +531,6 @@ string SoccerBehavior::Think(const std::string& message)
             }
         }
     }
-    /*
-     Vector3f fl = GetDriveVec(F1L)+GetDriveVec(F2R);
-     Vector3f pos(1,0,0);
-    //mMyPos
 
-     salt::Matrix mat;
-     mat.Identity();
-     //mat.RotateZ(salt::gArcTan2(mMyPos[1], mMyPos[0]));
-     mat.RotateZ(-salt::gArcTan2(fl[1]-mMyPos[1], fl[0]-mMyPos[0]));
-
-    // mat.RotateZ(salt::gArcTan2(mMyPos[1], mMyPos[0]));
-    pos = mat.Rotate(pos);
-     //cout << " mat.dump " << Pesc <<" b.Length() " << b.Length() << endl;
-
-    return Ir(pos);
-    //     double theta = salt::gArcTan2(f1l[1], f1l[0]) * 57.2957;
-     */
-    switch (unum) {
-        case 1:
-            return Arquero();
-        case 2:
-        case 3:
-            return Defensa();
-        case 4:
-        case 5:
-            return SeekBall();
-    }
-
-    return Motores();
+    return Accion();
 }
