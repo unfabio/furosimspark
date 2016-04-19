@@ -5,20 +5,12 @@ set(rcssagent3d_SRCS
    behavior.h
    soccerbehavior.h
    soccerbehavior.cpp
-   soccerbotbehavior.h
-   soccerbotbehavior.cpp
    estrategias/sbarquero.h
    estrategias/sbarquero.cpp
    estrategias/sbdefensa.h
    estrategias/sbdefensa.cpp
    estrategias/sbdelantero.h
    estrategias/sbdelantero.cpp
-   hoap2behavior.h
-   hoap2behavior.cpp
-   naobehavior.h
-   naobehavior.cpp
-   carbehavior.h
-   carbehavior.cpp
 )
 
 add_executable(rcssagent3d ${rcssagent3d_SRCS})
