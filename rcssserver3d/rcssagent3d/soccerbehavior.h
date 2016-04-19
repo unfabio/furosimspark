@@ -106,13 +106,6 @@ protected:
 
     std::string Motores( float v1=0, float v2=0) const;
     virtual std::string Accion() const;
-    std::string TurnLeft() const;
-    std::string TurnRight() const;
-    std::string Forward() const;
-    std::string Kick() const;
-    std::string SeekBall() const;
-    std::string Arquero() const;
-    std::string Defensa() const;
 
     salt::Vector3f GetPosition(const VisionSense& sense) const;
     salt::Vector3f GetPosition(const VisionObject& obj) const;
