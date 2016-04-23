@@ -39,10 +39,10 @@ string SBDefensa::Accion() const
    VisionObject G1, G2, F1, F2;
    int unum=soccerPerceptor.getUnum();
 
-   G1 = soccerPerceptor.RotarCancha(G1R);
-   G2 = soccerPerceptor.RotarCancha(G2R);
-   F1 = soccerPerceptor.RotarCancha(F1L);
-   F2 = soccerPerceptor.RotarCancha(F2L);
+   G1 = G1R;
+   G2 = G2R;
+   F1 = F1L;
+   F2 = F2L;
 
    Vector3f g1 = soccerPerceptor.GetDriveVec(G1);
    Vector3f g2 = soccerPerceptor.GetDriveVec(G2);
@@ -58,9 +58,9 @@ string SBDefensa::Accion() const
    //Buscar centrar el Balon
    if (myPos.x() > 0 && b.Length() > 3) {
       if (unum % 2 == 0) {
-           return Ir(b + soccerPerceptor.GetDriveVec(soccerPerceptor.RotarCancha(G1L)));
+           return Ir(b + soccerPerceptor.GetDriveVec(G1L));
       } else {
-           return Ir(b + soccerPerceptor.GetDriveVec(soccerPerceptor.RotarCancha(G2L)));
+           return Ir(b + soccerPerceptor.GetDriveVec(G2L));
       }
    }
 

@@ -52,25 +52,13 @@ public:
     virtual std::string Init();
     virtual std::string Think(const std::string& message);
 
-   //  const VisionSense& GetVisionSense(VisionObject obj) const;
-
 protected:
-   //  void ParseObjectVision(const oxygen::Predicate& predicate);
-   //  void ParseVision(const oxygen::Predicate& predicate);
-   //  bool GameState(const oxygen::Predicate& predicate);
-   //  void SetupVisionObjectMap();
+
 
     std::string Motores( float v1=0, float v2=0) const;
     virtual std::string Accion() const;
 
-   //  salt::Vector3f GetPosition(const VisionSense& sense) const;
-   //  salt::Vector3f GetPosition(const VisionObject& obj) const;
-   //  salt::Vector3f GetDriveVec(const VisionSense& vision) const;
-   //  salt::Vector3f GetDriveVec(const VisionObject& obj) const;
     std::string Ir(const salt::Vector3f& Dir) const;
-
-   //  VisionObject RotarCancha(const VisionObject& obj) const;
-
 
 protected:
    SoccerPerceptor soccerPerceptor;
@@ -83,13 +71,6 @@ protected:
     typedef std::map<std::string, VisionObject> TVisionObjectMap;
     TVisionObjectMap mVisionObjectMap;
 
-    // the players position
-   /* salt::Vector3f mMyPos;
-    VisionObject Equipo[5];
-    VisionObject EquipoOp[5];
-    string team = "";
-    string Estado= "";
-    int unum = 0;*/
 };
 
 #endif // SOCCERBEHAVIOR_H

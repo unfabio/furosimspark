@@ -82,8 +82,6 @@ protected:
 
     // the players position
     salt::Vector3f mMyPos;
-    VisionObject Equipo[5];
-    VisionObject EquipoOp[5];
     string team = "";
     string Estado= "";
     int unum = 0;

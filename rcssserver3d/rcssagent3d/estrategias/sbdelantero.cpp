@@ -40,10 +40,10 @@ string SBDelantero::Accion() const
     int unum=soccerPerceptor.getUnum();
     VisionObject G1, G2, F1, F2;
 
-    G1 = soccerPerceptor.RotarCancha(G1R);
-    G2 = soccerPerceptor.RotarCancha(G2R);
-    F1 = soccerPerceptor.RotarCancha(F1L);
-    F2 = soccerPerceptor.RotarCancha(F2L);
+    G1 = G1R;
+    G2 = G2R;
+    F1 = F1L;
+    F2 = F2L;
 
     Vector3f g1 = soccerPerceptor.GetDriveVec(G1);
     Vector3f g2 = soccerPerceptor.GetDriveVec(G2);

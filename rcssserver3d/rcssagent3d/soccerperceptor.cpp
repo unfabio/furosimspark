@@ -133,7 +133,7 @@ void SoccerPerceptor::ParseObjectVision(const Predicate& predicate)
         //             cerr << "T " << sense.theta << endl;
         //             cerr << "P " << sense.phi << endl;
         //             cerr << "---" << endl;
-        mVisionMap[vo] = sense;
+        mVisionMap[RotarCancha(vo)] = sense;
     }
 }
 
@@ -203,19 +203,6 @@ bool SoccerPerceptor::GameState(const Predicate& predicate)
         predicate.GetValue(iter2, team);
         cout << "FindParameter team: " << team << endl;
     }
-
-
-    VisionObject Objetos[] = {PL1, PL2, PL3, PL4, PL5, PR1, PR2, PR3, PR4, PR5};
-    for (int i = 0; i < 5; i++) {
-        if (team == "right") {
-            Equipo[i] = Objetos[i + 5];
-            EquipoOp[i] = Objetos[i];
-        } else {
-            Equipo[i] = Objetos[i];
-            EquipoOp[i] = Objetos[i + 5];
-        }
-    }
-
 
     Predicate::Iterator iter3(predicate);
     if (!predicate.FindParameter(iter3, "pm")) {

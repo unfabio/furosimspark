@@ -52,28 +52,30 @@ string SoccerBehavior::Ir(const salt::Vector3f& Dir) const {
     Vector3f vObj, vObjb, nDir = Dir, b = soccerPerceptor.GetDriveVec(VO_BALL);
    // float Dis = vObj.Length();
    float Dis = 0;
-/*
+   VisionObject Equipo[]= {PL1, PL2, PL3, PL4, PL5};
+   VisionObject EquipoOp[]= { PR1, PR2, PR3, PR4, PR5};
+   nDir.Normalize();
     for (int i = 0; i < 5; i++) {
         vObj = soccerPerceptor.GetDriveVec(Equipo[i]);
         Dis = vObj.Length();
         vObjb = vObj - b;
-        if (Dis > 0.1 && Dis < 10 && b.Length() > vObjb.Length()) {
+        if (Dis > 0.1 && Dis < 3 && b.Length() > vObjb.Length()) {
             vObj.Normalize();
             vObj *= 5.0 / (Dis * Dis);
             nDir -= vObj;
         }
     }
-    for (int i = 0; i < 5; i++) {
+   for (int i = 0; i < 5; i++) {
         vObj = soccerPerceptor.GetDriveVec(EquipoOp[i]);
         Dis = vObj.Length();
-        if (Dis > 0.1 && Dis < 2 && b.Length() + 1 > Dis) {
+        if (Dis > 0.1 && Dis < 3 && b.Length() + 1 > Dis) {
             vObj.Normalize();
             vObj *= 1.0 / (Dis * Dis);
             nDir -= vObj;
         }
     }
-*/
-    double theta = salt::gArcTan2(nDir[1], nDir[0]) * 57.2957;
+
+    double theta = gRadToDeg(salt::gArcTan2(nDir[1], nDir[0]));
     float d = gAbs(theta);
     float v1 = 0;
     float v2 = 0;

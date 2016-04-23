@@ -36,13 +36,13 @@ string SBArquero::Accion() const
 
    Vector3f b = soccerPerceptor.GetDriveVec(VO_BALL);
 
-  Vector3f g1 = soccerPerceptor.GetDriveVec(soccerPerceptor.RotarCancha(G1L));
-  Vector3f g2 = soccerPerceptor.GetDriveVec(soccerPerceptor.RotarCancha(G2L));
+  Vector3f g1 = soccerPerceptor.GetDriveVec(G1L);
+  Vector3f g2 = soccerPerceptor.GetDriveVec(G2L);
   Vector3f centro = g1 + g2, d1, d2, contrario, myPos = soccerPerceptor.getMyPos();
 
   //evitar que quede al costado de la cancha
   if (myPos.x()<-24 && gAbs(myPos.y()) > 4) {
-       return Ir(soccerPerceptor.GetDriveVec(soccerPerceptor.RotarCancha(G1R)));
+       return Ir(soccerPerceptor.GetDriveVec(G1R));
   }
 
 
@@ -56,7 +56,7 @@ string SBArquero::Accion() const
   }
   if (b.Length() < 10) {
        //Si esta cercar intentar botarla al arco contrario
-       contrario = soccerPerceptor.GetDriveVec(soccerPerceptor.RotarCancha(G1R));
+       contrario = soccerPerceptor.GetDriveVec(G1R);
        contrario.Normalize();
        if (contrario.Dot(b) > .5) {
            return Ir(b);
