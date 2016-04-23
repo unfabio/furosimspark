@@ -36,16 +36,10 @@ string SBDefensa::Accion() const
 {
    Vector3f b = soccerPerceptor.GetDriveVec(VO_BALL);
    Vector3f myPos = soccerPerceptor.getMyPos();
-   VisionObject G1, G2, F1, F2;
    int unum=soccerPerceptor.getUnum();
 
-   G1 = G1R;
-   G2 = G2R;
-   F1 = F1L;
-   F2 = F2L;
-
-   Vector3f g1 = soccerPerceptor.GetDriveVec(G1);
-   Vector3f g2 = soccerPerceptor.GetDriveVec(G2);
+   Vector3f g1 = soccerPerceptor.GetDriveVec(G1R);
+   Vector3f g2 = soccerPerceptor.GetDriveVec(G2R);
    Vector3f Dir = (g1 + g2) / 2;
 
    if (myPos.x() <-25) {
@@ -68,9 +62,9 @@ string SBDefensa::Accion() const
    // cout << " Pesc " << Pesc <<" b.Length() " << b.Length() << endl;
    if (Pesc < 0.3 && b.Length() < 2) {
       if (unum % 2 == 0) {
-           Dir = soccerPerceptor.GetDriveVec(F1);
+           Dir = soccerPerceptor.GetDriveVec(F1L);
       } else {
-           Dir = soccerPerceptor.GetDriveVec(F2);
+           Dir = soccerPerceptor.GetDriveVec(F2L);
       }
       Dir = Dir.Normalize() - b.Normalize();
    } else if (Pesc > 0.75 && b.Length() < 5) {
