@@ -34,29 +34,29 @@ string SBArquero::Accion() const
 {
 
 
-   Vector3f b = GetDriveVec(VO_BALL);
+   Vector3f b = soccerPerceptor.GetDriveVec(VO_BALL);
 
-  Vector3f g1 = GetDriveVec(RotarCancha(G1L));
-  Vector3f g2 = GetDriveVec(RotarCancha(G2L));
-  Vector3f centro = g1 + g2, d1, d2, contrario;
+  Vector3f g1 = soccerPerceptor.GetDriveVec(soccerPerceptor.RotarCancha(G1L));
+  Vector3f g2 = soccerPerceptor.GetDriveVec(soccerPerceptor.RotarCancha(G2L));
+  Vector3f centro = g1 + g2, d1, d2, contrario, myPos = soccerPerceptor.getMyPos();
 
   //evitar que quede al costado de la cancha
-  if (mMyPos.x()<-24 && gAbs(mMyPos.y()) > 4) {
-       return Ir(GetDriveVec(RotarCancha(G1R)));
+  if (myPos.x()<-24 && gAbs(myPos.y()) > 4) {
+       return Ir(soccerPerceptor.GetDriveVec(soccerPerceptor.RotarCancha(G1R)));
   }
 
 
   //volver al arco si se alejo mucho
-  if (centro.Dot(b) > 0 || mMyPos.x()>-5 || gAbs(mMyPos.y()) > 6) {
+  if (centro.Dot(b) > 0 || myPos.x()>-5 || gAbs(myPos.y()) > 6) {
        return Ir(centro);
   }
   //no se salga de la meta
-  if (mMyPos.x()<-26) {
+  if (myPos.x()<-26) {
        return Ir(b);
   }
   if (b.Length() < 10) {
        //Si esta cercar intentar botarla al arco contrario
-       contrario = GetDriveVec(RotarCancha(G1R));
+       contrario = soccerPerceptor.GetDriveVec(soccerPerceptor.RotarCancha(G1R));
        contrario.Normalize();
        if (contrario.Dot(b) > .5) {
            return Ir(b);

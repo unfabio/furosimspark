@@ -3,6 +3,9 @@
 set(rcssagent3d_SRCS
    main.cpp
    behavior.h
+   playmode.h
+   soccerperceptor.h
+   soccerperceptor.cpp
    soccerbehavior.h
    soccerbehavior.cpp
    estrategias/sbarquero.h

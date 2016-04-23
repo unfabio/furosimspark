@@ -28,8 +28,7 @@ using namespace salt;
 using namespace boost;
 
 SoccerBehavior::SoccerBehavior()
-: mZG("." PACKAGE_NAME)
-    , mMyPos(0, 0, 0)
+// : mMyPos(0, 0, 0)
 {
 }
 
@@ -37,223 +36,11 @@ SoccerBehavior::~SoccerBehavior()
 {
 }
 
-void SoccerBehavior::SetupVisionObjectMap()
-{
-    mVisionObjectMap.clear();
-    mVisionObjectMap["B"] = VO_BALL;
-    mVisionObjectMap["F1L"] = F1L;
-    mVisionObjectMap["G1L"] = G1L;
-    mVisionObjectMap["G2L"] = G2L;
-    mVisionObjectMap["F2L"] = F2L;
-    mVisionObjectMap["F1R"] = F1R;
-    mVisionObjectMap["G1R"] = G1R;
-    mVisionObjectMap["G2R"] = G2R;
-    mVisionObjectMap["F2R"] = F2R;
-    mVisionObjectMap["Pleft1"] = Pleft1;
-    mVisionObjectMap["Pleft2"] = Pleft2;
-    mVisionObjectMap["Pleft3"] = Pleft3;
-    mVisionObjectMap["Pleft4"] = Pleft4;
-    mVisionObjectMap["Pleft5"] = Pleft5;
-    mVisionObjectMap["Pright1"] = Pright1;
-    mVisionObjectMap["Pright2"] = Pright2;
-    mVisionObjectMap["Pright3"] = Pright3;
-    mVisionObjectMap["Pright4"] = Pright4;
-    mVisionObjectMap["Pright5"] = Pright5;
-}
-
 string SoccerBehavior::Init()
 {
-    mZG.GetCore()->ImportBundle("sexpparser");
-    mParser = static_pointer_cast<BaseParser>(mZG.GetCore()->New("SexpParser"));
-
-    if (mParser.get() == 0) {
-        cerr << "unable to create SexpParser instance." << endl;
-    }
-
-    SetupVisionObjectMap();
-
     // use the scene effector to build the agent and beam to a
     // position near the center of the playing field
     return "(scene rsg/agent/furo7x7.rsg)";
-}
-
-void SoccerBehavior::ParseObjectVision(const Predicate& predicate)
-{
-    for (
-            Predicate::Iterator iter(predicate);
-            iter != iter.end();
-            ++iter) {
-        // extract the element as a parameter list
-        Predicate::Iterator paramIter = iter;
-        if (!predicate.DescentList(paramIter)) {
-            continue;
-        }
-
-        // read the object name
-        string name;
-        if (!predicate.GetValue(paramIter, name)) {
-            continue;
-        }
-
-        // try read the 'id' section
-        string strteam;
-        if (predicate.GetValue(paramIter, "team", strteam)) {
-            if (strteam.find("left") != std::string::npos) {
-                name += "left";
-            } else if (strteam.find("right") != std::string::npos) {
-                name += "right";
-            }
-        }
-
-        // try read the 'id' section
-        string strId;
-        if (predicate.GetValue(paramIter, "id", strId)) {
-            name += strId;
-        }
-
-        // try to lookup the VisionObject
-        TVisionObjectMap::iterator visiter = mVisionObjectMap.find(name);
-        if (visiter == mVisionObjectMap.end()) {
-            // cout<< " no existe name "<< name << endl;
-            continue;
-        }
-
-        VisionObject vo = (*visiter).second;
-
-        // find the 'pol' entry in the object's section
-        Predicate::Iterator polIter = paramIter;
-        if (!predicate.FindParameter(polIter, "pol")) {
-            continue;
-        }
-
-        // read the position vector
-        VisionSense sense;
-        if (
-                (!predicate.AdvanceValue(polIter, sense.distance)) || (!predicate.AdvanceValue(polIter, sense.theta)) || (!predicate.AdvanceValue(polIter, sense.phi))) {
-            continue;
-        }
-
-        // update the vision map
-        //             cerr << "+++" << endl;
-        //             cerr << "VO " << vo << endl;
-        //             cerr << "D " << sense.distance << endl;
-        //             cerr << "T " << sense.theta << endl;
-        //             cerr << "P " << sense.phi << endl;
-        //             cerr << "---" << endl;
-        mVisionMap[vo] = sense;
-    }
-}
-
-const SoccerBehavior::VisionSense& SoccerBehavior::GetVisionSense(VisionObject obj) const
-{
-    static VisionSense invalidSense;
-
-    TVisionMap::const_iterator iter = mVisionMap.find(obj);
-
-    if (iter == mVisionMap.end()) {
-        cerr << "unknown VisionObject " << obj << "\n";
-        return invalidSense;
-    }
-
-    return (*iter).second;
-}
-
-Vector3f SoccerBehavior::GetPosition(const VisionSense& sense) const
-{
-    return mMyPos + GetDriveVec(sense) * sense.distance;
-}
-
-Vector3f SoccerBehavior::GetPosition(const VisionObject& obj) const 
-{
-    return GetPosition(GetVisionSense(obj));
-
-}
-Vector3f SoccerBehavior::GetDriveVec(const VisionObject& obj) const 
-{
-    return GetDriveVec(GetVisionSense(obj));
-}
-
-Vector3f SoccerBehavior::GetDriveVec(const VisionSense& vision) const 
-{
-    return Vector3f(
-            vision.distance * gCos(gDegToRad(vision.theta)) * gSin(gDegToRad(90.0f - vision.phi)),
-
-            vision.distance * gSin(gDegToRad(vision.theta)) * gSin(gDegToRad(90.0f - vision.phi)),
-
-            vision.distance * gCos(gDegToRad(90.0f - vision.phi)));
-}
-
-void SoccerBehavior::ParseVision(const Predicate& predicate) 
-{
-    ParseObjectVision(predicate);
-    // return;
-    // find the PerfectVision data about the object
-    Predicate::Iterator iter(predicate);
-
-    // advance to the section about object 'name'
-
-    if (!predicate.FindParameter(iter, "mypos")) {
-        return;
-    }
-
-    // read my position
-    VisionSense sense;
-
-    predicate.GetValue(iter, mMyPos);
-}
-
-bool SoccerBehavior::GameState(const Predicate& predicate) 
-{
-    // find the PerfectVision data about the object
-    Predicate::Iterator iter(predicate);
-
-    // advance to the section about object 'name'
-
-    string Value;
-    if (predicate.FindParameter(iter, "unum")) {
-        predicate.GetValue(iter, Value);
-        unum = stoi(Value);
-        cout << "FindParameter unum: " << unum << endl;
-    }
-    Predicate::Iterator iter2(predicate);
-    if (predicate.FindParameter(iter2, "team")) {
-        predicate.GetValue(iter2, team);
-        cout << "FindParameter team: " << team << endl;
-    }
-
-
-    VisionObject Objetos[] = {Pleft1, Pleft2, Pleft3, Pleft4, Pleft5, Pright1, Pright2, Pright3, Pright4, Pright5};
-    for (int i = 0; i < 5; i++) {
-        if (team == "right") {
-            Equipo[i] = Objetos[i + 5];
-            EquipoOp[i] = Objetos[i];
-        } else {
-            Equipo[i] = Objetos[i];
-            EquipoOp[i] = Objetos[i + 5];
-        }
-    }
-
-
-    Predicate::Iterator iter3(predicate);
-    if (!predicate.FindParameter(iter3, "pm")) {
-        return false;
-    }
-
-    predicate.GetValue(iter3, Estado);
-
-    if (Estado == STR_PM_PlayOn) {
-        return true;
-    }
-    if (team == "right") {
-        if ((Estado == STR_PM_KickOff_Right) || (Estado == STR_PM_KickIn_Right) || (Estado == STR_PM_CORNER_KICK_RIGHT) || (Estado == STR_PM_GOAL_KICK_RIGHT)) {
-            return true;
-        }
-    } else {
-        if ((Estado == STR_PM_KickOff_Left) || (Estado == STR_PM_KickIn_Left) || (Estado == STR_PM_CORNER_KICK_LEFT) || (Estado == STR_PM_GOAL_KICK_LEFT)) {
-            return true;
-        }
-    }
-    return false;
 }
 
 string SoccerBehavior::Accion() const
@@ -261,40 +48,13 @@ string SoccerBehavior::Accion() const
     return Motores();
 }
 
-VisionObject SoccerBehavior::RotarCancha(const VisionObject& obj) const {
-    if (team == "left")
-        return obj;
-    switch (obj) {
-        case F1L:return F2R;
-        case G1L:return G2R;
-        case G2L:return G1R;
-        case F2L:return F1R;
-        case F1R:return F2L;
-        case G1R:return G2L;
-        case G2R:return G1L;
-        case F2R:return F1L;
-        case Pleft1:return Pright1;
-        case Pleft2:return Pright2;
-        case Pleft3:return Pright3;
-        case Pleft4:return Pright4;
-        case Pleft5:return Pright5;
-        case Pright1:return Pleft1;
-        case Pright2:return Pleft2;
-        case Pright3:return Pleft3;
-        case Pright4:return Pleft4;
-        case Pright5:return Pleft5;
-        default:
-            return obj;
-    }
-    return obj;
-}
-
 string SoccerBehavior::Ir(const salt::Vector3f& Dir) const {
-    Vector3f vObj, vObjb, nDir = Dir, b = GetDriveVec(VO_BALL);
-    float Dis = vObj.Length();
-
+    Vector3f vObj, vObjb, nDir = Dir, b = soccerPerceptor.GetDriveVec(VO_BALL);
+   // float Dis = vObj.Length();
+   float Dis = 0;
+/*
     for (int i = 0; i < 5; i++) {
-        vObj = GetDriveVec(Equipo[i]);
+        vObj = soccerPerceptor.GetDriveVec(Equipo[i]);
         Dis = vObj.Length();
         vObjb = vObj - b;
         if (Dis > 0.1 && Dis < 10 && b.Length() > vObjb.Length()) {
@@ -304,7 +64,7 @@ string SoccerBehavior::Ir(const salt::Vector3f& Dir) const {
         }
     }
     for (int i = 0; i < 5; i++) {
-        vObj = GetDriveVec(EquipoOp[i]);
+        vObj = soccerPerceptor.GetDriveVec(EquipoOp[i]);
         Dis = vObj.Length();
         if (Dis > 0.1 && Dis < 2 && b.Length() + 1 > Dis) {
             vObj.Normalize();
@@ -312,7 +72,7 @@ string SoccerBehavior::Ir(const salt::Vector3f& Dir) const {
             nDir -= vObj;
         }
     }
-
+*/
     double theta = salt::gArcTan2(nDir[1], nDir[0]) * 57.2957;
     float d = gAbs(theta);
     float v1 = 0;
@@ -341,40 +101,17 @@ string SoccerBehavior::Ir(const salt::Vector3f& Dir) const {
     return Motores(v1, v2);
 }
 
-std::string SoccerBehavior::Motores(float v1, float v2) const 
+std::string SoccerBehavior::Motores(float v1, float v2) const
 {
     stringstream ss;
     ss << "(er1 " << v1 << ")(er3 " << v2 << ")";
     return ss.str();
 }
-string SoccerBehavior::Think(const std::string& message) 
+string SoccerBehavior::Think(const std::string& message)
 {
-
-    //return Forward();
-    cout << "message: " << message << endl;
-    boost::shared_ptr<PredicateList> predList = mParser->Parse(message);
-    if (predList.get() != 0) {
-        PredicateList& list = *predList;
-
-        for (
-                PredicateList::TList::const_iterator iter = list.begin();
-                iter != list.end();
-                ++iter) {
-            const Predicate& predicate = (*iter);
-
-            // check for the Vision perceptor
-
-            if (predicate.name == "See") {
-                ParseVision(predicate);
-                continue;
-            } else if (predicate.name == "GS") {
-
-                if (!GameState(predicate)) {
-                    return Motores();
-                }
-            }
-        }
-    }
-
-    return Accion();
+   cout << "message: " << message << endl;
+   if(soccerPerceptor.getSensation(message)){
+      return Accion();
+   }
+   return Motores();
 }

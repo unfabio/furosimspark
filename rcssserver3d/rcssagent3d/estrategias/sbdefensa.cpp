@@ -34,19 +34,21 @@ SBDefensa::~SBDefensa()
 
 string SBDefensa::Accion() const
 {
-   Vector3f b = GetDriveVec(VO_BALL);
+   Vector3f b = soccerPerceptor.GetDriveVec(VO_BALL);
+   Vector3f myPos = soccerPerceptor.getMyPos();
    VisionObject G1, G2, F1, F2;
+   int unum=soccerPerceptor.getUnum();
 
-   G1 = RotarCancha(G1R);
-   G2 = RotarCancha(G2R);
-   F1 = RotarCancha(F1L);
-   F2 = RotarCancha(F2L);
+   G1 = soccerPerceptor.RotarCancha(G1R);
+   G2 = soccerPerceptor.RotarCancha(G2R);
+   F1 = soccerPerceptor.RotarCancha(F1L);
+   F2 = soccerPerceptor.RotarCancha(F2L);
 
-   Vector3f g1 = GetDriveVec(G1);
-   Vector3f g2 = GetDriveVec(G2);
+   Vector3f g1 = soccerPerceptor.GetDriveVec(G1);
+   Vector3f g2 = soccerPerceptor.GetDriveVec(G2);
    Vector3f Dir = (g1 + g2) / 2;
 
-   if (mMyPos.x() <-25) {
+   if (myPos.x() <-25) {
       return Ir(Dir);
    }
 
@@ -54,11 +56,11 @@ string SBDefensa::Accion() const
    Dir = Dir.Normalize();
 
    //Buscar centrar el Balon
-   if (mMyPos.x() > 0 && b.Length() > 3) {
+   if (myPos.x() > 0 && b.Length() > 3) {
       if (unum % 2 == 0) {
-           return Ir(b + GetDriveVec(RotarCancha(G1L)));
+           return Ir(b + soccerPerceptor.GetDriveVec(soccerPerceptor.RotarCancha(G1L)));
       } else {
-           return Ir(b + GetDriveVec(RotarCancha(G2L)));
+           return Ir(b + soccerPerceptor.GetDriveVec(soccerPerceptor.RotarCancha(G2L)));
       }
    }
 
@@ -66,9 +68,9 @@ string SBDefensa::Accion() const
    // cout << " Pesc " << Pesc <<" b.Length() " << b.Length() << endl;
    if (Pesc < 0.3 && b.Length() < 2) {
       if (unum % 2 == 0) {
-           Dir = GetDriveVec(F1);
+           Dir = soccerPerceptor.GetDriveVec(F1);
       } else {
-           Dir = GetDriveVec(F2);
+           Dir = soccerPerceptor.GetDriveVec(F2);
       }
       Dir = Dir.Normalize() - b.Normalize();
    } else if (Pesc > 0.75 && b.Length() < 5) {

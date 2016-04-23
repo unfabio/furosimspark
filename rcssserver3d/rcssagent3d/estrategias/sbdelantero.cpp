@@ -35,25 +35,27 @@ SBDelantero::~SBDelantero()
 string SBDelantero::Accion() const
 {
 
-    Vector3f b = GetDriveVec(VO_BALL);
+    Vector3f b = soccerPerceptor.GetDriveVec(VO_BALL);
+    Vector3f myPos = soccerPerceptor.getMyPos();
+    int unum=soccerPerceptor.getUnum();
     VisionObject G1, G2, F1, F2;
 
-    G1 = RotarCancha(G1R);
-    G2 = RotarCancha(G2R);
-    F1 = RotarCancha(F1L);
-    F2 = RotarCancha(F2L);
+    G1 = soccerPerceptor.RotarCancha(G1R);
+    G2 = soccerPerceptor.RotarCancha(G2R);
+    F1 = soccerPerceptor.RotarCancha(F1L);
+    F2 = soccerPerceptor.RotarCancha(F2L);
 
-    Vector3f g1 = GetDriveVec(G1);
-    Vector3f g2 = GetDriveVec(G2);
+    Vector3f g1 = soccerPerceptor.GetDriveVec(G1);
+    Vector3f g2 = soccerPerceptor.GetDriveVec(G2);
     Vector3f Dir = (g1 + g2) / 2;
 
-    if (mMyPos.x() <-10 && b.Length() > 5) {
+    if (myPos.x() <-10 && b.Length() > 5) {
         return Ir(Dir);
     }
 
     //Buscar centrar el Balon si esta cerca de las esquinas del contrario
-    if (gAbs(mMyPos.y()) + mMyPos.x() > 28) {
-        Dir += (GetDriveVec(F2) + GetDriveVec(F1))*.01;
+    if (gAbs(myPos.y()) + myPos.x() > 28) {
+        Dir += (soccerPerceptor.GetDriveVec(F2) + soccerPerceptor.GetDriveVec(F1))*.01;
     }
 
     Dir -= b;
@@ -63,9 +65,9 @@ string SBDelantero::Accion() const
     // cout << " Pesc " << Pesc <<" b.Length() " << b.Length() << endl;
     if (Pesc < 0.3 && b.Length() < 2) {
         if (unum % 2 == 0) {
-            Dir = GetDriveVec(F1);
+            Dir = soccerPerceptor.GetDriveVec(F1);
         } else {
-            Dir = GetDriveVec(F2);
+            Dir = soccerPerceptor.GetDriveVec(F2);
         }
         Dir = Dir.Normalize() - b.Normalize();
     } else if (Pesc > 0.75 && b.Length() < 5) {
