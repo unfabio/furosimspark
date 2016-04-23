@@ -2,9 +2,10 @@ cmake_minimum_required(VERSION 2.6)
 
 project(rcssserver3d CXX C)
 set(PACKAGE_VERSION "0.6.10")
+SET(LATEX_OUTPUT_PATH build/doc)
 
 ########## check for headerfiles/libraries ##########
-include(CheckIncludeFile) 
+include(CheckIncludeFile)
 check_include_file("sys/socket.h" HAVE_SYS_SOCKET_H)
 check_include_file("netinet/in.h" HAVE_NETINET_IN_H)
 check_include_file("arpa/inet.h" HAVE_ARPA_INET_H)
@@ -34,7 +35,7 @@ find_package(OpenGL REQUIRED)
 find_package(Carbon)
 find_package(Qt4 COMPONENTS QtXml QtOpenGl QtGui QtCore)
 
-########## add extra flags ########## 
+########## add extra flags ##########
 if(NOT CMAKE_BUILD_TYPE)
   set (CMAKE_BUILD_TYPE Release)
 endif(NOT CMAKE_BUILD_TYPE)
@@ -74,7 +75,7 @@ set(CMAKE_SHARED_MODULE_PREFIX "")
 mark_as_advanced(BINDIR LIBDIR DATADIR INCLUDEDIR)
 
 set(GUI_DATA_DIR ${DATADIR}/carbon)
- 
+
 ########## generate configuration file ##########
 if (APPLE)
   set(BUNDLE_PATH ${CMAKE_INSTALL_PREFIX}/share/${CMAKE_PROJECT_NAME})
@@ -117,9 +118,9 @@ endif (CARBON_FOUND)
 
 ########### install files ###############
 
-install(FILES  AUTHORS ChangeLog COPYING NEWS README THANKS TODO 
+install(FILES  AUTHORS ChangeLog COPYING NEWS README THANKS TODO
        DESTINATION ${DATADIR}/doc/${CMAKE_PROJECT_NAME})
-install(FILES  ${CMAKE_BINARY_DIR}/rcssserver3d_config.h 
+install(FILES  ${CMAKE_BINARY_DIR}/rcssserver3d_config.h
        DESTINATION ${INCLUDEDIR}/${CMAKE_PROJECT_NAME})
 
 ########### uninstall support ############
@@ -141,7 +142,7 @@ set(CPACK_PACKAGE_VERSION ${PACKAGE_VERSION})
 set(CPACK_SOURCE_PACKAGE_FILE_NAME
     ${CMAKE_PROJECT_NAME}-${CPACK_PACKAGE_VERSION})
 
-set(CPACK_STRIP_FILES TRUE)	
+set(CPACK_STRIP_FILES TRUE)
 set(CPACK_PACKAGE_VENDOR "RoboCup Soccer Server 3D Maintenance Group")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "RoboCup Soccer Simulation Server 3D")
