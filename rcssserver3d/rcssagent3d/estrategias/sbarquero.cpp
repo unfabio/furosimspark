@@ -24,13 +24,14 @@ using namespace salt;
 SBArquero::SBArquero()
 : SoccerBehavior()
 {
+    ng=0;
 }
 
 SBArquero::~SBArquero()
 {
 }
 
-string SBArquero::Accion() const
+string SBArquero::Accion()
 {
 
 
@@ -47,14 +48,19 @@ string SBArquero::Accion() const
 
 
   //volver al arco si se alejo mucho
-  if (centro.Dot(b) > 0 || myPos.x()>-5 || gAbs(myPos.y()) > 6) {
+  if (myPos.x()>-5 || gAbs(myPos.y()) > 6) {
        return Ir(centro);
   }
   //no se salga de la meta
-  if (myPos.x()<-26) {
+  if (myPos.x()<-25) {
        return Ir(b);
   }
-  if (b.Length() < 10) {
+
+  if (centro.Dot(b) > 0 ) {
+       return Ir(centro);
+  }
+
+  if (b.Length() < 4) {
        //Si esta cercar intentar botarla al arco contrario
        contrario = soccerPerceptor.GetDriveVec(G1R);
        contrario.Normalize();
@@ -63,11 +69,14 @@ string SBArquero::Accion() const
        }
        return Ir(b - contrario);
   }
-  d1 = b - g1;
-  d2 = b - g2;
-  if (d1.Length() < d2.Length()) {
-       return Ir(g1 + g2 * .5 + b * .3);
-  } else {
-       return Ir(g2 + g1 * .5 + b * .3);
+  d1 = g1 + b * .3;
+  d2 = g2 + b * .3;
+  if(d1.Length()<4){
+     ng=0;
   }
+  if(d2.Length()<4){
+     ng=1;
+  }
+  return Ir(ng?d1:d2);
+
 }

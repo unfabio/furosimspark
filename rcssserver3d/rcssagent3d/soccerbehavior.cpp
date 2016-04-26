@@ -43,7 +43,7 @@ string SoccerBehavior::Init()
     return "(scene rsg/agent/furo7x7.rsg)";
 }
 
-string SoccerBehavior::Accion() const
+string SoccerBehavior::Accion()
 {
     return Motores();
 }
@@ -61,7 +61,7 @@ string SoccerBehavior::Ir(const salt::Vector3f& Dir) const {
         vObjb = vObj - b;
         if (Dis > 0.1 && Dis < 3 && b.Length() > vObjb.Length()) {
             vObj.Normalize();
-            vObj *= 5.0 / (Dis * Dis);
+            vObj *= 1.0 / (Dis * Dis);
             nDir -= vObj;
         }
     }
@@ -70,7 +70,7 @@ string SoccerBehavior::Ir(const salt::Vector3f& Dir) const {
         Dis = vObj.Length();
         if (Dis > 0.1 && Dis < 3 && b.Length() + 1 > Dis) {
             vObj.Normalize();
-            vObj *= 1.0 / (Dis * Dis);
+            vObj *= 0.5 / (Dis * Dis);
             nDir -= vObj;
         }
     }

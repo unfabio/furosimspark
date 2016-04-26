@@ -32,7 +32,7 @@ SBDelantero::~SBDelantero()
 {
 }
 
-string SBDelantero::Accion() const
+string SBDelantero::Accion()
 {
 
     Vector3f b = soccerPerceptor.GetDriveVec(VO_BALL);
@@ -67,7 +67,7 @@ string SBDelantero::Accion() const
     } else if (Pesc > 0.75 && b.Length() < 5) {
         Dir = Dir + b;
     } else {
-        fact = -b.Length() *.5 - 1;
+        fact = -b.Length() *.2 - 1;
         Dir = Dir * fact + b;
     }
     return Ir(Dir);

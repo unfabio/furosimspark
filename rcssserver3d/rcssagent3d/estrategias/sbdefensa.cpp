@@ -32,7 +32,7 @@ SBDefensa::~SBDefensa()
 {
 }
 
-string SBDefensa::Accion() const
+string SBDefensa::Accion()
 {
    Vector3f b = soccerPerceptor.GetDriveVec(VO_BALL);
    Vector3f myPos = soccerPerceptor.getMyPos();
@@ -71,6 +71,7 @@ string SBDefensa::Accion() const
       Dir = Dir + b;
    } else {
       fact = -b.Length() *.7;
+      if(fact<-3)fact=3;
       Dir = Dir * fact + b;
    }
    return Ir(Dir);

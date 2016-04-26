@@ -35,7 +35,7 @@ public:
     virtual ~SBDefensa ();
 
 protected:
-    virtual std::string Accion() const;
+    virtual std::string Accion();
 
 };
 

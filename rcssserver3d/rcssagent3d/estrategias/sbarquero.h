@@ -27,9 +27,10 @@ class SBArquero : public SoccerBehavior
 public:
     SBArquero();
     virtual ~SBArquero ();
-
+    int ng;
+    salt::Vector3f bAnt;
 protected:
-    virtual std::string Accion() const;
+    virtual std::string Accion();
 
 };
 

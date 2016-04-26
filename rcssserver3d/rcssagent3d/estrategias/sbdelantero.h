@@ -35,7 +35,7 @@ public:
     virtual ~SBDelantero ();
 
 protected:
-    virtual std::string Accion() const;
+    virtual std::string Accion();
 
 };
 

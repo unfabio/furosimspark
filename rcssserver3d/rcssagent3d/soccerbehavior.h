@@ -56,7 +56,7 @@ protected:
 
 
     std::string Motores( float v1=0, float v2=0) const;
-    virtual std::string Accion() const;
+    virtual std::string Accion();
 
     std::string Ir(const salt::Vector3f& Dir) const;
 
