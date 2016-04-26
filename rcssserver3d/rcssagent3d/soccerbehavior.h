@@ -29,23 +29,6 @@ using namespace std;
 class SoccerBehavior : public Behavior
 {
 public:
-    struct VisionSense
-    {
-        /** distance perceptor to object */
-        float distance;
-
-        /** theta is the angle in the X-Y (horizontal) plane */
-        float theta;
-
-        /** phi is the latitude angle */
-        float phi;
-
-        VisionSense() : distance(0), theta(0), phi(0) {};
-    };
-
-
-
-public:
     SoccerBehavior();
     virtual ~SoccerBehavior();
 
@@ -54,22 +37,12 @@ public:
 
 protected:
 
-
     std::string Motores( float v1=0, float v2=0) const;
     virtual std::string Accion();
-
     std::string Ir(const salt::Vector3f& Dir) const;
 
 protected:
    SoccerPerceptor soccerPerceptor;
-
-    // mapping from vision object to VisionSense
-    typedef std::map<VisionObject, VisionSense> TVisionMap;
-    TVisionMap mVisionMap;
-
-    // mapping from <ObjectName>+<ID> to VisionObject
-    typedef std::map<std::string, VisionObject> TVisionObjectMap;
-    TVisionObjectMap mVisionObjectMap;
 
 };
 
