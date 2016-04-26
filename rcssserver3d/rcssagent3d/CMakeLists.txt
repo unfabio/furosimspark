@@ -8,12 +8,18 @@ set(rcssagent3d_SRCS
    soccerperceptor.cpp
    soccerbehavior.h
    soccerbehavior.cpp
-   estrategias/sbarquero.h
-   estrategias/sbarquero.cpp
-   estrategias/sbdefensa.h
-   estrategias/sbdefensa.cpp
-   estrategias/sbdelantero.h
-   estrategias/sbdelantero.cpp
+   estrategias/leftFuroBlue/sbarquerol.h
+   estrategias/leftFuroBlue/sbarquerol.cpp
+   estrategias/leftFuroBlue/sbdefensal.h
+   estrategias/leftFuroBlue/sbdefensal.cpp
+   estrategias/leftFuroBlue/sbdelanterol.h
+   estrategias/leftFuroBlue/sbdelanterol.cpp
+   estrategias/rightFuroRed/sbarqueror.h
+   estrategias/rightFuroRed/sbarqueror.cpp
+   estrategias/rightFuroRed/sbdefensar.h
+   estrategias/rightFuroRed/sbdefensar.cpp
+   estrategias/rightFuroRed/sbdelanteror.h
+   estrategias/rightFuroRed/sbdelanteror.cpp
 )
 
 add_executable(rcssagent3d ${rcssagent3d_SRCS})

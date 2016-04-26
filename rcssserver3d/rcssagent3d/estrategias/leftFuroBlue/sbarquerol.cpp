@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: SBArquero.cpp 331 2013-02-13 08:31:45Z hedayat $
+   $Id: SBArqueroL.cpp 331 2013-02-13 08:31:45Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,21 +17,21 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#include "sbarquero.h"
+#include "sbarquerol.h"
 
 using namespace salt;
 
-SBArquero::SBArquero()
+SBArqueroL::SBArqueroL()
 : SoccerBehavior()
 {
     ng=0;
 }
 
-SBArquero::~SBArquero()
+SBArqueroL::~SBArqueroL()
 {
 }
 
-string SBArquero::Accion()
+string SBArqueroL::Accion()
 {
 
 

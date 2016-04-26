@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: SBDelantero.cpp 331 2013-02-13 08:31:45Z hedayat $
+   $Id: SBDelanteroL.cpp 331 2013-02-13 08:31:45Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -17,22 +17,22 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-#include "sbdelantero.h"
+#include "sbdelanterol.h"
 // #include <iostream>
 // #include <sstream>
 
 using namespace salt;
 
-SBDelantero::SBDelantero()
+SBDelanteroL::SBDelanteroL()
 : SoccerBehavior()
 {
 }
 
-SBDelantero::~SBDelantero()
+SBDelanteroL::~SBDelanteroL()
 {
 }
 
-string SBDelantero::Accion()
+string SBDelanteroL::Accion()
 {
 
     Vector3f b = soccerPerceptor.GetDriveVec(VO_BALL);

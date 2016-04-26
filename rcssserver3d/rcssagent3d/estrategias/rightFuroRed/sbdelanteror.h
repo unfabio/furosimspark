@@ -17,10 +17,10 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef SBDefensa_H
-#define SBDefensa_H
+#ifndef SBDelanteroR_H
+#define SBDelanteroR_H
 
-#include "../soccerbehavior.h"
+#include "../../soccerbehavior.h"
 // #include <oxygen/gamecontrolserver/baseparser.h>
 // #include <oxygen/gamecontrolserver/predicate.h>
 // #include <zeitgeist/zeitgeist.h>
@@ -28,15 +28,15 @@
 
 
 
-class SBDefensa : public SoccerBehavior
+class SBDelanteroR : public SoccerBehavior
 {
 public:
-    SBDefensa();
-    virtual ~SBDefensa ();
+    SBDelanteroR();
+    virtual ~SBDelanteroR ();
 
 protected:
     virtual std::string Accion();
 
 };
 
-#endif // SBDefensa_H
+#endif // SBDelanteroR_H

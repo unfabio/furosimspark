@@ -26,9 +26,13 @@
 #include <rcssnet/tcpsocket.hpp>
 #include <rcssnet/exception.hpp>
 #include <boost/scoped_ptr.hpp>
-#include "estrategias/sbarquero.h"
-#include "estrategias/sbdefensa.h"
-#include "estrategias/sbdelantero.h"
+
+#include "estrategias/leftFuroBlue/sbarquerol.h"
+#include "estrategias/leftFuroBlue/sbdefensal.h"
+#include "estrategias/leftFuroBlue/sbdelanterol.h"
+#include "estrategias/rightFuroRed/sbarqueror.h"
+#include "estrategias/rightFuroRed/sbdefensar.h"
+#include "estrategias/rightFuroRed/sbdelanteror.h"
 
 
 #ifdef HAVE_SYS_SOCKET_H
@@ -266,19 +270,19 @@ void Run() {
     ss << "(init (unum 0)(teamname " << teamname << "))";
     switch (unum) {
         case 1:ss << "(beam -25 0 90)";
-            p= (SoccerBehavior*) new SBArquero();
+            p= (SoccerBehavior*) new SBArqueroL();
             break;
         case 2:ss << "(beam -15 2 0)";
-            p= (SoccerBehavior*) new SBDefensa();
+            p= (SoccerBehavior*) new SBDefensaL();
             break;
         case 3:ss << "(beam -15 -2 0)";
-            p= (SoccerBehavior*) new SBDefensa();
+            p= (SoccerBehavior*) new SBDefensaL();
             break;
         case 4:ss << "(beam -6 -4 0)";
-            p= (SoccerBehavior*) new SBDelantero();
+            p= (SoccerBehavior*) new SBDelanteroL();
             break;
         case 5:ss << "(beam -6 4 0)";
-            p= (SoccerBehavior*) new SBDelantero();
+            p= (SoccerBehavior*) new SBDelanteroL();
             break;
          default:
          return;

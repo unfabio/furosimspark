@@ -17,21 +17,26 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef SBArquero_H
-#define SBArquero_H
+#ifndef SBDefensaR_H
+#define SBDefensaR_H
 
-#include "../soccerbehavior.h"
+#include "../../soccerbehavior.h"
+// #include <oxygen/gamecontrolserver/baseparser.h>
+// #include <oxygen/gamecontrolserver/predicate.h>
+// #include <zeitgeist/zeitgeist.h>
+// #include <string>
 
-class SBArquero : public SoccerBehavior
+
+
+class SBDefensaR : public SoccerBehavior
 {
 public:
-    SBArquero();
-    virtual ~SBArquero ();
-    int ng;
-    salt::Vector3f bAnt;
+    SBDefensaR();
+    virtual ~SBDefensaR ();
+
 protected:
     virtual std::string Accion();
 
 };
 
-#endif // SBArquero_H
+#endif // SBDefensaR_H
