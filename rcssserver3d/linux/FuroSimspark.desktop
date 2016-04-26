@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=FuroSimspark
+Comment=RoboCup Soccer Simulation Server 3D
+Exec=/home/fabio/maestria/furosimspark/rcssserver3d/build/start.sh
+Icon=simspark
+Terminal=true
+Type=Application
+Categories=Education;Science;Robotics;
