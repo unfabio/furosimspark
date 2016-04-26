@@ -126,7 +126,6 @@ void ReadOptions(int argc, char* argv[])
 bool Init()
 {
     cout << "connecting to TCP " << gHost << ":" << gPort << " unum " << unum << "\n";
-    //cout << "connecting to UDP " << gHost << ":" << gPort << "\n";
 
     try
         {
@@ -219,16 +218,10 @@ bool GetMessage(string& msg)
         bytesRead += readResult;
     }
 
-    //cerr << "buffer = |" << string(buffer+1) << "|\n";
-    //cerr << "bytesRead = |" << bytesRead << "|\n";
-    //cerr << "Size of buffer = |" << sizeof(buffer) << "|\n";
-    //cerr << "buffer = |" << buffer << "|\n";
-    //cerr << "buffer[5] = |" << buffer[5] << "|\n";
-    //printf ("xxx-%s\n", buffer+5);
+
 
     // msg is prefixed with it's total length
     int msgLen = ntohl(*(unsigned int*)buffer);
-    // cerr << "GM 6 / " << msgLen << " (bytesRead " << bytesRead << ")\n";
     if(sizeof(unsigned int) + msgLen > sizeof(buffer)) {
         cerr << "message too long; aborting" << endl;
         abort();
@@ -237,7 +230,6 @@ bool GetMessage(string& msg)
     // read remaining message segments
     int msgRead = bytesRead - sizeof(unsigned int);
 
-    //cerr << "msgRead = |" << msgRead << "|\n";
 
     char *offset = buffer + bytesRead;
 
@@ -257,16 +249,12 @@ bool GetMessage(string& msg)
             continue;
         msgRead += readResult;
         offset += readResult;
-        //cerr << "msgRead = |" << msgRead << "|\n";
     }
 
-    // zero terminate received data
     (*offset) = 0;
 
     msg = string(buffer+sizeof(unsigned int));
 
-    // DEBUG
-    //cout << msg << endl;
 
     return true;
 }
@@ -286,10 +274,10 @@ void Run() {
         case 3:ss << "(beam -15 -2 0)";
             p= (SoccerBehavior*) new SBDefensa();
             break;
-        case 4:ss << "(beam -5 -4 45)";
+        case 4:ss << "(beam -6 -4 0)";
             p= (SoccerBehavior*) new SBDelantero();
             break;
-        case 5:ss << "(beam -5 4 -45)";
+        case 5:ss << "(beam -6 4 0)";
             p= (SoccerBehavior*) new SBDelantero();
             break;
          default:
