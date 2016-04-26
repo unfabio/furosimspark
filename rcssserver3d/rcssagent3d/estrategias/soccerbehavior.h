@@ -17,22 +17,34 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef SBArqueroL_H
-#define SBArqueroL_H
+#ifndef SOCCERBEHAVIOR_H
+#define SOCCERBEHAVIOR_H
 
-#include "../soccerbehavior.h"
+#include "../behavior.h"
+#include "soccerperceptor.h"
+#include <string>
 
-class SBArqueroL : public SoccerBehavior
+using namespace std;
+
+class SoccerBehavior : public Behavior
 {
 public:
-    SBArqueroL();
-    virtual ~SBArqueroL ();
-    int ng;
-    salt::Vector3f bAnt;
-    static SoccerBehavior * Crear() { return new SBArqueroL(); }
+    SoccerBehavior();
+    virtual ~SoccerBehavior();
+
+    virtual std::string Init();
+    virtual std::string Think(const std::string& message);
 
 protected:
+
+    std::string Motores( float v1=0, float v2=0) const;
     virtual std::string Accion();
+    std::string Ir(const salt::Vector3f& Dir) const;
+
+protected:
+   SoccerPerceptor soccerPerceptor;
+
 };
 
-#endif // SBArqueroL_H
+
+#endif // SOCCERBEHAVIOR_H

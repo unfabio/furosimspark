@@ -20,7 +20,7 @@
 #ifndef SBDelanteroR_H
 #define SBDelanteroR_H
 
-#include "../../soccerbehavior.h"
+#include "../soccerbehavior.h"
 // #include <oxygen/gamecontrolserver/baseparser.h>
 // #include <oxygen/gamecontrolserver/predicate.h>
 // #include <zeitgeist/zeitgeist.h>
@@ -33,6 +33,7 @@ class SBDelanteroR : public SoccerBehavior
 public:
     SBDelanteroR();
     virtual ~SBDelanteroR ();
+    static SoccerBehavior * Crear() { return new SBDelanteroR(); }
 
 protected:
     virtual std::string Accion();

@@ -26,13 +26,14 @@
 #include <rcssnet/tcpsocket.hpp>
 #include <rcssnet/exception.hpp>
 #include <boost/scoped_ptr.hpp>
-
+/*
 #include "estrategias/leftFuroBlue/sbarquerol.h"
 #include "estrategias/leftFuroBlue/sbdefensal.h"
 #include "estrategias/leftFuroBlue/sbdelanterol.h"
 #include "estrategias/rightFuroRed/sbarqueror.h"
 #include "estrategias/rightFuroRed/sbdefensar.h"
-#include "estrategias/rightFuroRed/sbdelanteror.h"
+#include "estrategias/rightFuroRed/sbdelanteror.h"*/
+#include "estrategias/crearJugador.h"
 
 
 #ifdef HAVE_SYS_SOCKET_H
@@ -268,25 +269,33 @@ void Run() {
     string msg;
     stringstream ss;
     ss << "(init (unum 0)(teamname " << teamname << "))";
-    switch (unum) {
+
+   switch (unum) {
         case 1:ss << "(beam -25 0 90)";
-            p= (SoccerBehavior*) new SBArqueroL();
+            msg = "Arquero";
             break;
         case 2:ss << "(beam -15 2 0)";
-            p= (SoccerBehavior*) new SBDefensaL();
+            msg = "Defensa";
             break;
         case 3:ss << "(beam -15 -2 0)";
-            p= (SoccerBehavior*) new SBDefensaL();
+            msg = "Defensa";
             break;
         case 4:ss << "(beam -6 -4 0)";
-            p= (SoccerBehavior*) new SBDelanteroL();
+            msg = "Delantero";
             break;
         case 5:ss << "(beam -6 4 0)";
-            p= (SoccerBehavior*) new SBDelanteroL();
+            msg = "Delantero";
             break;
          default:
          return;
-    }
+   }
+   msg+=teamname.substr(0,1);
+   p = CrearJugador::Get()->Crear(msg);
+   if(!p){
+      cout << "Error no se encontro (" << msg<< ")\n";
+      return ;
+   }
+
     scoped_ptr<Behavior> behavior(p);
     PutMessage(behavior->Init());
     GetMessage(msg);

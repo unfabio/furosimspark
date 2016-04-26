@@ -17,22 +17,41 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef SBArqueroL_H
-#define SBArqueroL_H
+#ifndef CREARJUGADOR_H
+#define CREARJUGADOR_H
 
-#include "../soccerbehavior.h"
+#include "leftFuroBlue/sbarquerol.h"
+#include "leftFuroBlue/sbdefensal.h"
+#include "leftFuroBlue/sbdelanterol.h"
+#include "rightFuroRed/sbarqueror.h"
+#include "rightFuroRed/sbdefensar.h"
+#include "rightFuroRed/sbdelanteror.h"
 
-class SBArqueroL : public SoccerBehavior
+using namespace std;
+
+typedef SoccerBehavior* ( *SoccerBehavior_Crear)(void);
+
+
+class CrearJugador
 {
+private:
+
+       CrearJugador &operator=(const CrearJugador &) { return *this; }
 public:
-    SBArqueroL();
-    virtual ~SBArqueroL ();
-    int ng;
-    salt::Vector3f bAnt;
-    static SoccerBehavior * Crear() { return new SBArqueroL(); }
+   CrearJugador();
+   CrearJugador(const CrearJugador &) { }
+    virtual ~CrearJugador();
+
+    static CrearJugador *Get()
+    {
+       static CrearJugador instance;
+       return &instance;
+    }
+    SoccerBehavior *Crear(const string &nombreJugador);
 
 protected:
-    virtual std::string Accion();
+    typedef std::map<std::string, SoccerBehavior_Crear> JugadoresMap;
+    JugadoresMap mJugadoresMap;
 };
 
-#endif // SBArqueroL_H
+#endif // CREARJUGADOR

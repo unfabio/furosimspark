@@ -2,7 +2,7 @@
    this file is part of rcssserver3D
    Fri May 9 2003
    Copyright (C) 2003 Koblenz University
-   $Id: soccerbehavior.h 9 2008-11-24 02:39:02Z hedayat $
+   $Id: SoccerPerceptor.cpp 331 2013-02-13 08:31:45Z hedayat $
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -16,34 +16,28 @@
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-*/
-#ifndef SOCCERBEHAVIOR_H
-#define SOCCERBEHAVIOR_H
+ */
+#include "crearJugador.h"
 
-#include "behavior.h"
-#include "soccerperceptor.h"
-#include <string>
-
-using namespace std;
-
-class SoccerBehavior : public Behavior
+CrearJugador::CrearJugador()
 {
-public:
-    SoccerBehavior();
-    virtual ~SoccerBehavior();
+   mJugadoresMap.clear();
+   mJugadoresMap["Arquerol"] = &SBArqueroL::Crear;
+   mJugadoresMap["Defensal"] = &SBDefensaL::Crear;
+   mJugadoresMap["Delanterol"] = &SBDelanteroL::Crear;
+   mJugadoresMap["Arqueror"] = &SBArqueroR::Crear;
+   mJugadoresMap["Defensar"] = &SBDefensaR::Crear;
+   mJugadoresMap["Delanteror"] = &SBDelanteroR::Crear;
+}
 
-    virtual std::string Init();
-    virtual std::string Think(const std::string& message);
+CrearJugador::~CrearJugador()
+{
+}
 
-protected:
-
-    std::string Motores( float v1=0, float v2=0) const;
-    virtual std::string Accion();
-    std::string Ir(const salt::Vector3f& Dir) const;
-
-protected:
-   SoccerPerceptor soccerPerceptor;
-
-};
-
-#endif // SOCCERBEHAVIOR_H
+SoccerBehavior *CrearJugador::Crear(const string &nombreJugador)
+{
+	JugadoresMap::iterator it = mJugadoresMap.find(nombreJugador);
+	if( it != mJugadoresMap.end() )
+		return it->second();
+	return NULL;
+}

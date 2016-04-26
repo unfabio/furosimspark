@@ -20,7 +20,7 @@
 #ifndef SBArqueroR_H
 #define SBArqueroR_H
 
-#include "../../soccerbehavior.h"
+#include "../soccerbehavior.h"
 
 class SBArqueroR : public SoccerBehavior
 {
@@ -29,6 +29,8 @@ public:
     virtual ~SBArqueroR ();
     int ng;
     salt::Vector3f bAnt;
+    static SoccerBehavior * Crear() { return new SBArqueroR(); }
+
 protected:
     virtual std::string Accion();
 

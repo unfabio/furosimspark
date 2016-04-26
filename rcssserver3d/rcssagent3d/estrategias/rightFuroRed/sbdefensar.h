@@ -20,7 +20,7 @@
 #ifndef SBDefensaR_H
 #define SBDefensaR_H
 
-#include "../../soccerbehavior.h"
+#include "../soccerbehavior.h"
 // #include <oxygen/gamecontrolserver/baseparser.h>
 // #include <oxygen/gamecontrolserver/predicate.h>
 // #include <zeitgeist/zeitgeist.h>
@@ -33,6 +33,7 @@ class SBDefensaR : public SoccerBehavior
 public:
     SBDefensaR();
     virtual ~SBDefensaR ();
+    static SoccerBehavior * Crear() { return new SBDefensaR(); }
 
 protected:
     virtual std::string Accion();

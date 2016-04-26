@@ -20,7 +20,7 @@
 #ifndef SOCCERPERCEPTOR_H
 #define SOCCERPERCEPTOR_H
 
-#include "playmode.h"
+#include "../playmode.h"
 #include <oxygen/gamecontrolserver/baseparser.h>
 #include <oxygen/gamecontrolserver/predicate.h>
 #include <zeitgeist/zeitgeist.h>

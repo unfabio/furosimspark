@@ -4,10 +4,12 @@ set(rcssagent3d_SRCS
    main.cpp
    behavior.h
    playmode.h
-   soccerperceptor.h
-   soccerperceptor.cpp
-   soccerbehavior.h
-   soccerbehavior.cpp
+   estrategias/soccerperceptor.h
+   estrategias/soccerperceptor.cpp
+   estrategias/soccerbehavior.h
+   estrategias/soccerbehavior.cpp
+   estrategias/crearJugador.h
+   estrategias/crearJugador.cpp
    estrategias/leftFuroBlue/sbarquerol.h
    estrategias/leftFuroBlue/sbarquerol.cpp
    estrategias/leftFuroBlue/sbdefensal.h
